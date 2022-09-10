@@ -33,7 +33,7 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 Identation =  [ \t\f]
 Comma =  ","
-SemiColon = ";"
+SemiColon = ";"{WhiteSpace}* //preguntar a profes comportamiento raro
 
 Plus = "+"
 Mult = "*"
@@ -68,8 +68,8 @@ StringConstant = "\"" ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConst
 
 <YYINITIAL>{
     /*Keywords*/
-    "DECVAR"                                {return symbol(ParserSym.DECVAR);}
-    "ENDDEC"                                {return symbol(ParserSym.ENDDEC);}
+    "DECVAR"{WhiteSpace}*                   {return symbol(ParserSym.DECVAR);}
+    "ENDDEC"{WhiteSpace}*                   {return symbol(ParserSym.ENDDEC);}
     "Integer"                               {return symbol((ParserSym.INTEGER));}
     "Float"                                 {return symbol((ParserSym.FLOAT));}
     "if"                                    {return symbol(ParserSym.IF);}
@@ -100,8 +100,8 @@ StringConstant = "\"" ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConst
     {NotEqual}                                { return symbol(ParserSym.NOT_EQUAL); }
     {Equal}                                   { return symbol(ParserSym.EQUAL); }
     {Not}                                     { return symbol(ParserSym.NOT); }
-    {OpenBlock}                               { return symbol(ParserSym.OPEN_BLOCK); }
-    {CloseBlock}                              { return symbol(ParserSym.CLOSE_BLOCK); }
+    {OpenBlock}{WhiteSpace}*                  { return symbol(ParserSym.OPEN_BLOCK); }
+    {CloseBlock}{WhiteSpace}*                 { return symbol(ParserSym.CLOSE_BLOCK); }
     {LineTerminator}                          { return symbol(ParserSym.LINE_TERMINATOR); }
     {Comma}                                   { return symbol(ParserSym.COMMA); }
     {WhiteSpace}                              { /* ignore */ }

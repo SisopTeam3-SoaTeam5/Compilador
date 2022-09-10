@@ -108,15 +108,17 @@ Fecha de entrega: 07/11/2022
 
 ## Temas comunes
 
-### While
+### ~~While~~
 
 [Ejemplo](src/test/resources/while.txt)
 
-### If
+### ~~If~~
 
 [Ejemplo](src/test/resources/if.txt)
 
 ### Asignaciones
+* cambiar el lexema
+* que se puedan hacer varias en la misma sentencia
 
 [Ejemplo](src/test/resources/assignments.txt)
 
@@ -129,6 +131,8 @@ Fecha de entrega: 07/11/2022
 [Ejemplo](src/test/resources/assignments.txt)
 
 ### Declaración de variables
+* cambiar el lexema y hacerlo bloque
+
 Todas las variables deberán ser declaradas dentro de un bloque especial para ese fin,
 delimitado por la palabra reservada init dentro de un bloque delimitado por llaves.
 
@@ -142,6 +146,8 @@ IMPORTANTE: Las variables no guardan su valor en tabla de símbolos.
 Las asignaciones deben ser permitidas, solo en los casos en los que los tipos son compatibles, caso contrario deberá desplegarse un error.
 
 ### Comentarios
+* usar el string constant del flex y crear la regla en el cup
+
 Deberán estar delimitados por `/*` y `*/` y podrán estar anidados en un solo nivel.
 
 [Ejemplo Comentario](src/test/resources/comment.txt)
@@ -157,6 +163,9 @@ Las salidas y entradas por teclado se implementarán como se muestra en el sigui
 
 
 ### Condiciones
+* confirmar que esta realizado
+* consultar como limitar las dos
+
 Las condiciones para un constructor de ciclos o de selección pueden ser simples ( a < b )  o múltiples.
 Las condiciones múltiples pueden ser hasta dos condiciones simples ligadas a través del operador lógico (AND, OR) o una condición simple con el operador lógico NOT
 
@@ -183,6 +192,8 @@ Esta función del lenguaje tomará como entrada una expresión (pivot)  y una li
 `#Iguales ( a+w/b, [(d-3)*2,e,f] )  = 2 si  (a+w/b = (d-3)*2 ) & (a+w/b =f) & (a+w/b ≠ e)`
 
 ### AllEqual
+* queda todo
+
 Esta función del lenguaje tomará como entrada dos a más listas de expresiones y devolverá verdadero si cada elemento en orden posicional es igual a su par correspondiente en cada   una de las listas. Caso contrario: Falso. La cantidad de listas es indefinida.
 
 **Ejemplo:**
@@ -191,6 +202,7 @@ Esta función del lenguaje tomará como entrada dos a más listas de expresiones
 `
 
 ### Case
+* queda todo
 Se deberá implementar la sentencia DO CASE con la última cláusula DEFAULT, que será opcional
 Ejemplo:
 
