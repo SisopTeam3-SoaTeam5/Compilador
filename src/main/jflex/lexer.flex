@@ -29,10 +29,11 @@ import static lyc.compiler.constants.Constants.*;
 %}
 
 
-LineTerminator = \r|\n|\r\n|";"
+LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 Identation =  [ \t\f]
 Comma =  ","
+SemiColon = ";"
 
 Plus = "+"
 Mult = "*"
@@ -89,6 +90,7 @@ StringConstant = "\"" ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConst
     {Mult}                                    { return symbol(ParserSym.MULT); }
     {Div}                                     { return symbol(ParserSym.DIV); }
     {Assig}                                   { return symbol(ParserSym.ASSIG); }
+    {SemiColon}                               { return symbol((ParserSym.SEMICOLON));}
     {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
     {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
     {GreaterThan}                             { return symbol(ParserSym.GREATER_THAN); }
@@ -100,6 +102,7 @@ StringConstant = "\"" ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConst
     {Not}                                     { return symbol(ParserSym.NOT); }
     {OpenBlock}                               { return symbol(ParserSym.OPEN_BLOCK); }
     {CloseBlock}                              { return symbol(ParserSym.CLOSE_BLOCK); }
-    {LineTerminator}                          { return symbol(ParseSym.LINE_TERMINATOR); }
-    {Comma}                                   { return symbol(ParseSym.COMMA); }
+    {LineTerminator}                          { return symbol(ParserSym.LINE_TERMINATOR); }
+    {Comma}                                   { return symbol(ParserSym.COMMA); }
+    {WhiteSpace}                              { /* ignore */ }
 }
