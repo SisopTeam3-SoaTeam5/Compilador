@@ -1,8 +1,9 @@
-DECVAR
+init {
     contador: Integer;
     promedio: Float;
     actual, suma: Float;
-ENDDEC
+    nombre: String;
+}
 
 write "Hola mundo!";
 contador: 0;
@@ -10,6 +11,7 @@ contador: 0;
 actual: 999;
 suma: 02;
 contador: contador+1;
+nombre: "Charles Leclerc";
 
 while (contador <= 92) {
     contador: contador + 1;

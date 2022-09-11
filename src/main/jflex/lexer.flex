@@ -61,17 +61,18 @@ WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
 FloatConstant = {Digit}+"."{Digit}+
-StringConstant = "\"" ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConstant} | {Operator} | {OpenBracket} | {CloseBracket} )* "\""
-
+Content =  ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConstant} | {Operator} | {OpenBracket} | {CloseBracket} )*
+StringConstant = "\"" {Content} "\""
+Comment = "/*" {Content} "*/"
 %%
 
 
 <YYINITIAL>{
     /*Keywords*/
-    "DECVAR"{WhiteSpace}*                   {return symbol(ParserSym.DECVAR);}
-    "ENDDEC"{WhiteSpace}*                   {return symbol(ParserSym.ENDDEC);}
+    "init"{WhiteSpace}*                     {return symbol(ParserSym.INIT);}
     "Integer"                               {return symbol((ParserSym.INTEGER));}
     "Float"                                 {return symbol((ParserSym.FLOAT));}
+    "String"                                {return symbol((ParserSym.STRING));}
     "if"                                    {return symbol(ParserSym.IF);}
     "else"                                  {return symbol(ParserSym.ELSE);}
     "while"                                 {return symbol((ParserSym.WHILE));}
@@ -104,5 +105,6 @@ StringConstant = "\"" ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConst
     {CloseBlock}{WhiteSpace}*                 { return symbol(ParserSym.CLOSE_BLOCK); }
     {LineTerminator}                          { return symbol(ParserSym.LINE_TERMINATOR); }
     {Comma}                                   { return symbol(ParserSym.COMMA); }
-    {WhiteSpace}                              { /* ignore */ }
+    {Comment}                                 { /* ignore comments */ } //Parece como que no funciona ignorar para ninguno de los dos casos
+    {WhiteSpace}                              { /* ignore whitespaces */ }
 }
