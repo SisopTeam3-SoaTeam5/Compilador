@@ -54,6 +54,8 @@ LessOrEqual = "<="
 NotEqual = "!="
 Equal = "=="
 Not = "!"
+AND = "&&"
+OR = "||"
 
 Operator = {GreaterThan} | {LessThan} | {GreaterOrEqual} | {LessOrEqual} | {NotEqual} | {Equal} | {Plus} | {Mult} | {Sub} | {Div} | {Assig} | {Not}
 
@@ -77,6 +79,7 @@ Comment = "/*" {Content} "*/"
     "else"                                  {return symbol(ParserSym.ELSE);}
     "while"                                 {return symbol((ParserSym.WHILE));}
     "write"                                 {return symbol(ParserSym.WRITE);}
+    "read"                                  {return symbol(ParserSym.READ);}
 
     /* identifiers */
     {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
@@ -101,6 +104,8 @@ Comment = "/*" {Content} "*/"
     {NotEqual}                                { return symbol(ParserSym.NOT_EQUAL); }
     {Equal}                                   { return symbol(ParserSym.EQUAL); }
     {Not}                                     { return symbol(ParserSym.NOT); }
+    {AND}                                     { return symbol(ParserSym.AND); }
+    {OR}                                      { return symbol(ParserSym.OR); }
     {OpenBlock}{WhiteSpace}*                  { return symbol(ParserSym.OPEN_BLOCK); }
     {CloseBlock}{WhiteSpace}*                 { return symbol(ParserSym.CLOSE_BLOCK); }
     {LineTerminator}                          { return symbol(ParserSym.LINE_TERMINATOR); }

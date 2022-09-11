@@ -123,6 +123,7 @@ Fecha de entrega: 07/11/2022
 [Ejemplo](src/test/resources/assignments.txt)
 
 ### Tipos de datos
+* Queda verificar los bits de cada uno
 
 - Float (32 bits): el separador decimal será el punto “.”
 - Int (16 bits)
@@ -130,8 +131,7 @@ Fecha de entrega: 07/11/2022
 
 [Ejemplo](src/test/resources/assignments.txt)
 
-### Declaración de variables
-* cambiar el lexema y hacerlo bloque
+### ~~Declaración de variables~~
 
 Todas las variables deberán ser declaradas dentro de un bloque especial para ese fin,
 delimitado por la palabra reservada init dentro de un bloque delimitado por llaves.
@@ -146,7 +146,7 @@ IMPORTANTE: Las variables no guardan su valor en tabla de símbolos.
 Las asignaciones deben ser permitidas, solo en los casos en los que los tipos son compatibles, caso contrario deberá desplegarse un error.
 
 ### Comentarios
-* usar el string constant del flex y crear la regla en el cup
+* ver por que no se ignora, mismo problema con los enter
 
 Deberán estar delimitados por `/*` y `*/` y podrán estar anidados en un solo nivel.
 
@@ -154,7 +154,7 @@ Deberán estar delimitados por `/*` y `*/` y podrán estar anidados en un solo n
 
 Nota: Los comentarios se ignoran, de manera que no generan un componente léxico o token
 
-### Entrada y salida
+### ~~Entrada y salida~~
 Las salidas y entradas por teclado se implementarán como se muestra en el siguiente ejemplo:
 
 [Ejemplo Entrada](src/test/resources/read.txt)
@@ -163,17 +163,16 @@ Las salidas y entradas por teclado se implementarán como se muestra en el sigui
 
 
 ### Condiciones
-* confirmar que esta realizado
-* consultar como limitar las dos
 
 Las condiciones para un constructor de ciclos o de selección pueden ser simples ( a < b )  o múltiples.
 Las condiciones múltiples pueden ser hasta dos condiciones simples ligadas a través del operador lógico (AND, OR) o una condición simple con el operador lógico NOT
 
-[Ejemplo AND](src/test/resources/and.txt)
+~~[Ejemplo AND](src/test/resources/and.txt)~~
 
-[Ejemplo OR](src/test/resources/or.txt)
+~~[Ejemplo OR](src/test/resources/or.txt)~~
 
 [Ejemplo NOT](src/test/resources/not.txt)
+ --> Faltaria ver si solo se puede hacer con comparaciones
 
 
 ### Tabla de Símbolos

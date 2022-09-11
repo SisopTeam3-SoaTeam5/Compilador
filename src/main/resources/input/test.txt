@@ -12,8 +12,9 @@ actual: 999;
 suma: 02;
 contador: contador+1;
 nombre: "Charles Leclerc";
+read(base);
 
-while (contador <= 92) {
+while (contador <= 92 && suma < 1) {
     contador: contador + 1;
     actual: (contador/0.342) + (contador*contador);
     suma: suma + actual;
@@ -22,6 +23,9 @@ while (contador <= 92) {
 write "La suma es: ";
 write suma;
 
+if (! actual > 2){
+    write "not prueba";
+}
 if (actual > 2){
     write "2 > 3";
 }
