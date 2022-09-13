@@ -83,27 +83,27 @@ start with sta;
 
 sta ::= programa {: System.out.println("sta ::= programa"); :};
 programa ::= bloque {: System.out.println("programa ::= bloque"); :};
-programa ::= bloquedec bloque {: System.out.println("programa ::= bloquedec bloque"); :};
-bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :};
+programa ::= bloquedec bloque {: System.out.println("programa ::= bloquedec bloque"); :}; //esto es un tema, porque permite meter un bloquedec dentro de un while, if, switch,etc
+bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :}; //habría que tener algo distinto a "programa" con bloques sin bloquedec
 declaraciones ::= declaracion {: System.out.println("declaraciones ::= declaracion"); :};
 declaraciones ::= declaraciones declaracion {: System.out.println("declaraciones ::= declaraciones declaracion"); :};
 bloque ::= sentencia {: System.out.println("bloque ::= sentencia"); :};
 bloque ::= bloque sentencia {: System.out.println("bloque ::= bloque sentencia"); :};
-sentencia ::= linea {: System.out.println("sentencia ::= linea "); :};
+sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOLON"); :};
 sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
 sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
 sentencia ::= all_equal {: System.out.println("sentencia ::= all_equal"); :};
-linea ::= asignacion SEMICOLON {: System.out.println("linea ::= asignacion SEMICOLON"); :};
-linea ::= escritura SEMICOLON {: System.out.println("linea ::= escritura SEMICOLON "); :};
-linea ::= lectura SEMICOLON {: System.out.println("linea ::= lectura SEMICOLON"); :};
+linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
+linea ::= escritura {: System.out.println("linea ::= escritura"); :};
+linea ::= lectura {: System.out.println("linea ::= lectura"); :};
 declaracion ::= list_identifier ASSIG type SEMICOLON {: System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON"); :};
 list_identifier ::= IDENTIFIER{: System.out.println("list_identifier ::= IDENTIFIER"); :};
 list_identifier ::= list_identifier COMMA IDENTIFIER {: System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier"); :};
 type ::= INTEGER | FLOAT | STRING {: System.out.println("type ::= INTEGER | FLOAT | STRING"); :};
 asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
-escritura ::= WRITE IDENTIFIER  {: System.out.println("escritura ::= WRITE IDENTIFIER"); :};
+escritura ::= WRITE IDENTIFIER  {: System.out.println("escritura ::= WRITE IDENTIFIER"); :};            //bancar escritura de expresiones? write a+b
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
 pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK"); :};
 pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK ELSE OPEN_BLOCK programa CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK ELSE OPEN_BLOCK programa CLOSE_BLOCK"); :};
@@ -112,15 +112,15 @@ switch ::= DO IDENTIFIER lista_casos DEFAULT programa ENDDO {: System.out.printl
 switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
 lista_casos ::= lista_casos CASE comparacion programa {: System.out.println("lista_casos ::= lista_casos CASE comparacion programa"); :};
 lista_casos ::= CASE comparacion programa {: System.out.println("lista_casos ::= CASE comparacion programa"); :};
-all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :};
+all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
 all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET SEMICOLON {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET SEMICOLON"); :};
 all_equal_params ::= all_equal_params COMMA array_expresiones {: System.out.println("all_equal_params ::= all_equal_params COMMA array_expresiones"); :};
-all_equal_params ::= array_expresiones {: System.out.println("all_equal_params ::= array_expresiones"); :};
+all_equal_params ::= array_expresiones COMMA array_expresiones {: System.out.println("all_equal_params ::= array_expresiones"); :};
 array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
 lista_expresiones ::= lista_expresiones COMMA expression {: System.out.println("lista_expresiones ::= lista_expresiones COMMA expression "); :};
 lista_expresiones ::= expression {: System.out.println("lista_expresiones ::= lista_expresiones"); :};
 condicion ::= comparacion {: System.out.println("condicion ::= comparacion"); :};
-condicion ::= comparacion logical comparacion {: System.out.println("condicion ::= comparacion logical comparacion"); :};
+condicion ::= comparacion logical comparacion {: System.out.println("condicion ::= comparacion logical comparacion"); :}; //a propósito para no tener mas de 2?
 logical ::= AND | OR {: System.out.println("logical ::= AND | OR"); :};
 condicion ::= NOT comparacion {: System.out.println("condicion ::= NOT comparacion "); :}; //REVISAR ESTA, ESTA RARI
 comparacion ::= expression comparador expression {: System.out.println("comparacion ::= expression comparador expression"); :};
