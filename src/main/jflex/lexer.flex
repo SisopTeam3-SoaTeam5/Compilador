@@ -80,6 +80,10 @@ Comment = "/*" {Content} "*/"
     "while"                                 {return symbol((ParserSym.WHILE));}
     "write"                                 {return symbol(ParserSym.WRITE);}
     "read"                                  {return symbol(ParserSym.READ);}
+    "DO"                                    {return symbol(ParserSym.DO);}
+    "ENDDO"                                 {return symbol(ParserSym.ENDDO);}
+    "CASE"                                  {return symbol(ParserSym.CASE);}
+    "DEFAULT"                               {return symbol(ParserSym.DEFAULT);}
 
     /* identifiers */
     {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
@@ -91,7 +95,7 @@ Comment = "/*" {Content} "*/"
                                                 else throw new RuntimeException("Constantes Integer deben tener 16 bits o menos"); }
     {FloatConstant}                          {  int bits = Float.floatToIntBits(new Float(yytext()));
                                                 if(Integer.toBinaryString(bits).length() <= 32) //chequear esto, esta medio fafafa
-                                                    return symbol(ParserSym.FLOAT_CONSTANT, yytext())
+                                                    return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                                 else throw  new RuntimeException("Constantes Float deben tener 32 bits o menos"); }
     {StringConstant}                         {  String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
                                                 if(s.length()<=42) // 42 para no contar ambas comillas ""

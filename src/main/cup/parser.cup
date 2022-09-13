@@ -40,6 +40,10 @@ terminal CLOSE_BLOCK;
 terminal LINE_TERMINATOR;
 terminal COMMA;
 terminal SEMICOLON;
+terminal DO;
+terminal ENDDO;
+terminal CASE;
+terminal DEFAULT;
 
 // Non Terminals
 non terminal sta;
@@ -64,6 +68,8 @@ non terminal term;
 non terminal factor;
 non terminal logical;
 non terminal condicion;
+non terminal switch;
+non terminal lista_casos;
 
 // Start Symbol Definition
 start with sta;
@@ -79,6 +85,7 @@ bloque ::= bloque sentencia {: System.out.println("bloque ::= bloque sentencia")
 sentencia ::= linea {: System.out.println("sentencia ::= linea "); :};
 sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
+sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
 linea ::= asignacion SEMICOLON {: System.out.println("linea ::= asignacion SEMICOLON"); :};
 linea ::= escritura SEMICOLON {: System.out.println("linea ::= escritura SEMICOLON "); :};
 linea ::= lectura SEMICOLON {: System.out.println("linea ::= lectura SEMICOLON"); :};
@@ -93,6 +100,10 @@ lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("le
 pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK"); :};
 pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK ELSE OPEN_BLOCK programa CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK ELSE OPEN_BLOCK programa CLOSE_BLOCK"); :};
 loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK {: System.out.println("loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK"); :};
+switch ::= DO IDENTIFIER lista_casos DEFAULT programa ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT programa ENDDO"); :};
+switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
+lista_casos ::= lista_casos CASE comparacion programa {: System.out.println("lista_casos ::= lista_casos CASE comparacion programa"); :};
+lista_casos ::= CASE comparacion programa {: System.out.println("lista_casos ::= CASE comparacion programa"); :};
 condicion ::= comparacion {: System.out.println("condicion ::= comparacion"); :};
 condicion ::= comparacion logical comparacion {: System.out.println("condicion ::= comparacion logical comparacion"); :};
 logical ::= AND | OR {: System.out.println("logical ::= AND | OR"); :};
