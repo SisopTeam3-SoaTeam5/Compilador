@@ -6,9 +6,17 @@ init {
 }
 
 write "Hola";
+write a;
+write (a+b)*c;
 contador: 0;
 
-AllEqual([a+b, c+d], [a+b, c+d]);
+a:AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
+if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
+    a: a;
+}
+
+DO a CASE a==101 a:1; CASE a>202 a:2; DEFAULT a:3; ENDDO
+
 
 actual: 999;
 suma: 02;
