@@ -37,7 +37,6 @@ terminal AND;
 terminal OR;
 terminal OPEN_BLOCK;
 terminal CLOSE_BLOCK;
-terminal LINE_TERMINATOR;
 terminal COMMA;
 terminal SEMICOLON;
 terminal DO;
@@ -51,7 +50,7 @@ terminal SQUARE_CLOSE_BRACKET;
 // Non Terminals
 non terminal sta;
 non terminal programa;
-non terminal bloque;
+non terminal bloquecod;
 non terminal bloquedec;
 non terminal declaraciones;
 non terminal sentencia;
@@ -82,13 +81,13 @@ non terminal lista_expresiones;
 start with sta;
 
 sta ::= programa {: System.out.println("sta ::= programa"); :};
-programa ::= bloque {: System.out.println("programa ::= bloque"); :};
-programa ::= bloquedec bloque {: System.out.println("programa ::= bloquedec bloque"); :}; //esto es un tema, porque permite meter un bloquedec dentro de un while, if, switch,etc
-bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :}; //habría que tener algo distinto a "programa" con bloques sin bloquedec
+programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
+programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
+bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :};
 declaraciones ::= declaracion {: System.out.println("declaraciones ::= declaracion"); :};
 declaraciones ::= declaraciones declaracion {: System.out.println("declaraciones ::= declaraciones declaracion"); :};
-bloque ::= sentencia {: System.out.println("bloque ::= sentencia"); :};
-bloque ::= bloque sentencia {: System.out.println("bloque ::= bloque sentencia"); :};
+bloquecod ::= sentencia {: System.out.println("bloquecod ::= sentencia"); :};
+bloquecod ::= bloquecod sentencia {: System.out.println("bloquecod ::= bloquecod sentencia"); :};
 sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOLON"); :};
 sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
@@ -102,28 +101,30 @@ list_identifier ::= IDENTIFIER{: System.out.println("list_identifier ::= IDENTIF
 list_identifier ::= list_identifier COMMA IDENTIFIER {: System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier"); :};
 type ::= INTEGER | FLOAT | STRING {: System.out.println("type ::= INTEGER | FLOAT | STRING"); :};
 asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
+asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
+asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
-escritura ::= WRITE IDENTIFIER  {: System.out.println("escritura ::= WRITE IDENTIFIER"); :};            //bancar escritura de expresiones? write a+b
+escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
-pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK"); :};
-pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK ELSE OPEN_BLOCK programa CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK ELSE OPEN_BLOCK programa CLOSE_BLOCK"); :};
-loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK {: System.out.println("loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK programa CLOSE_BLOCK"); :};
-switch ::= DO IDENTIFIER lista_casos DEFAULT programa ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT programa ENDDO"); :};
+pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK {: System.out.println("loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO"); :};
 switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
-lista_casos ::= lista_casos CASE comparacion programa {: System.out.println("lista_casos ::= lista_casos CASE comparacion programa"); :};
-lista_casos ::= CASE comparacion programa {: System.out.println("lista_casos ::= CASE comparacion programa"); :};
+lista_casos ::= lista_casos CASE comparacion bloquecod {: System.out.println("lista_casos ::= lista_casos CASE comparacion bloquecod"); :};
+lista_casos ::= CASE comparacion bloquecod {: System.out.println("lista_casos ::= CASE comparacion bloquecod"); :};
 all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
-all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET SEMICOLON {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET SEMICOLON"); :};
 all_equal_params ::= all_equal_params COMMA array_expresiones {: System.out.println("all_equal_params ::= all_equal_params COMMA array_expresiones"); :};
 all_equal_params ::= array_expresiones COMMA array_expresiones {: System.out.println("all_equal_params ::= array_expresiones"); :};
 array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
 lista_expresiones ::= lista_expresiones COMMA expression {: System.out.println("lista_expresiones ::= lista_expresiones COMMA expression "); :};
 lista_expresiones ::= expression {: System.out.println("lista_expresiones ::= lista_expresiones"); :};
 condicion ::= comparacion {: System.out.println("condicion ::= comparacion"); :};
-condicion ::= comparacion logical comparacion {: System.out.println("condicion ::= comparacion logical comparacion"); :}; //a propósito para no tener mas de 2?
-logical ::= AND | OR {: System.out.println("logical ::= AND | OR"); :};
+condicion ::= comparacion logical comparacion {: System.out.println("condicion ::= comparacion logical comparacion"); :};
 condicion ::= NOT comparacion {: System.out.println("condicion ::= NOT comparacion "); :}; //REVISAR ESTA, ESTA RARI
+logical ::= AND | OR {: System.out.println("logical ::= AND | OR"); :};
 comparacion ::= expression comparador expression {: System.out.println("comparacion ::= expression comparador expression"); :};
+comparacion ::= all_equal {: System.out.println("comparacion ::= expression comparador expression"); :};
 comparador ::= GREATER_THAN | LESS_THAN | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL | EQUAL {: System.out.println("comparador ::= GREATER_THAN | LESS_THAN | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL | EQUAL"); :};
 expression ::= expression PLUS term {: System.out.println("expression ::= expression PLUS term "); :};
 expression ::= expression SUB term {: System.out.println("expression ::= expression SUB term"); :};
@@ -134,5 +135,4 @@ term ::= factor {: System.out.println("term ::= factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
-factor ::= STRING_CONSTANT:constant {: System.out.println("factor ::= STRING_CONSTANT:constant ==> " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET"); :};

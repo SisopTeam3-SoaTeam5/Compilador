@@ -128,7 +128,6 @@ Comment = "/*" {Content} "*/"
     {OR}                                      { return symbol(ParserSym.OR); }
     {OpenBlock}{WhiteSpace}*                  { return symbol(ParserSym.OPEN_BLOCK); }
     {CloseBlock}{WhiteSpace}*                 { return symbol(ParserSym.CLOSE_BLOCK); }
-    {LineTerminator}                          { return symbol(ParserSym.LINE_TERMINATOR); }
     {Comma}                                   { return symbol(ParserSym.COMMA); }
     {Comment}                                 { /* ignore comments */ } //Parece como que no funciona ignorar para ninguno de los dos casos
     {WhiteSpace}                              { /* ignore whitespaces */ }
