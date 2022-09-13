@@ -1,5 +1,6 @@
 package lyc.compiler.main;
 
+import java_cup.runtime.Symbol;
 import lyc.compiler.Parser;
 import lyc.compiler.factories.FileFactory;
 import lyc.compiler.factories.ParserFactory;

@@ -33,7 +33,7 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 Identation =  [ \t\f]
 Comma =  ","
-SemiColon = ";"{WhiteSpace}* //preguntar a profes comportamiento raro
+SemiColon = ";"
 
 Plus = "+"
 Mult = "*"
@@ -74,12 +74,12 @@ Comment = "/*" {Content} "*/"
 <YYINITIAL>{
     /*Keywords*/
     "init"                                  {return symbol(ParserSym.INIT);}
-    "Integer"                               {return symbol((ParserSym.INTEGER));}
-    "Float"                                 {return symbol((ParserSym.FLOAT));}
-    "String"                                {return symbol((ParserSym.STRING));}
+    "Integer"                               {return symbol(ParserSym.INTEGER);}
+    "Float"                                 {return symbol(ParserSym.FLOAT);}
+    "String"                                {return symbol(ParserSym.STRING);}
     "if"                                    {return symbol(ParserSym.IF);}
     "else"                                  {return symbol(ParserSym.ELSE);}
-    "while"                                 {return symbol((ParserSym.WHILE));}
+    "while"                                 {return symbol(ParserSym.WHILE);}
     "write"                                 {return symbol(ParserSym.WRITE);}
     "read"                                  {return symbol(ParserSym.READ);}
     "DO"                                    {return symbol(ParserSym.DO);}
@@ -112,7 +112,7 @@ Comment = "/*" {Content} "*/"
     {Mult}                                    { return symbol(ParserSym.MULT); }
     {Div}                                     { return symbol(ParserSym.DIV); }
     {Assig}                                   { return symbol(ParserSym.ASSIG); }
-    {SemiColon}                               { return symbol((ParserSym.SEMICOLON));}
+    {SemiColon}                               { return symbol(ParserSym.SEMICOLON);}
     {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
     {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
     {SquareOpenBracket}                       { return symbol(ParserSym.SQUARE_OPEN_BRACKET); }
@@ -126,9 +126,8 @@ Comment = "/*" {Content} "*/"
     {Not}                                     { return symbol(ParserSym.NOT); }
     {AND}                                     { return symbol(ParserSym.AND); }
     {OR}                                      { return symbol(ParserSym.OR); }
-    {OpenBlock}{WhiteSpace}*                  { return symbol(ParserSym.OPEN_BLOCK); }
-    {CloseBlock}{WhiteSpace}*                 { return symbol(ParserSym.CLOSE_BLOCK); }
-    {LineTerminator}                          { return symbol(ParserSym.LINE_TERMINATOR); }
+    {OpenBlock}                               { return symbol(ParserSym.OPEN_BLOCK); }
+    {CloseBlock}                              { return symbol(ParserSym.CLOSE_BLOCK); }
     {Comma}                                   { return symbol(ParserSym.COMMA); }
     {Comment}                                 { /* ignore comments */ } //Parece como que no funciona ignorar para ninguno de los dos casos
     {WhiteSpace}                              { /* ignore whitespaces */ }

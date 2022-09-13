@@ -37,7 +37,6 @@ terminal AND;
 terminal OR;
 terminal OPEN_BLOCK;
 terminal CLOSE_BLOCK;
-terminal LINE_TERMINATOR;
 terminal COMMA;
 terminal SEMICOLON;
 terminal DO;
