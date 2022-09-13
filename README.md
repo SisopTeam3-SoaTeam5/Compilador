@@ -199,8 +199,8 @@ Esta función del lenguaje tomará como entrada dos a más listas de expresiones
 `AllEqual ( [a+w,b,c], [(d-3)*2,e,f], [g,h,i] )  es True si (a+w = (d-3)*2 = g) & (b = e = h) & (c=f=i)
 `
 
-### Case
-* queda todo
+### ~~Case~~
+* queda revisar que ande piola con los enters pero ya estaria
 Se deberá implementar la sentencia DO CASE con la última cláusula DEFAULT, que será opcional
 Ejemplo:
 

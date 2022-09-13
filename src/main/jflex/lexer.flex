@@ -42,6 +42,8 @@ Div = "/"
 Assig = ":"
 OpenBracket = "("
 CloseBracket = ")"
+SquareOpenBracket = "["
+SquareCloseBracket = "]"
 OpenBlock= "{"
 CloseBlock= "}"
 Letter = [a-zA-Z]
@@ -84,6 +86,7 @@ Comment = "/*" {Content} "*/"
     "ENDDO"                                 {return symbol(ParserSym.ENDDO);}
     "CASE"                                  {return symbol(ParserSym.CASE);}
     "DEFAULT"                               {return symbol(ParserSym.DEFAULT);}
+    "AllEqual"                              {return symbol(ParserSym.ALLEQUAL);}
 
     /* identifiers */
     {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
@@ -112,6 +115,8 @@ Comment = "/*" {Content} "*/"
     {SemiColon}                               { return symbol((ParserSym.SEMICOLON));}
     {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
     {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
+    {SquareOpenBracket}                       { return symbol(ParserSym.SQUARE_OPEN_BRACKET); }
+    {SquareCloseBracket}                      { return symbol(ParserSym.SQUARE_CLOSE_BRACKET); }
     {GreaterThan}                             { return symbol(ParserSym.GREATER_THAN); }
     {LessThan}                                { return symbol(ParserSym.LESS_THAN); }
     {GreaterOrEqual}                          { return symbol(ParserSym.GREATER_OR_EQUAL); }
