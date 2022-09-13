@@ -5,7 +5,7 @@ init {
     nombre: String;
 }
 
-write "Hola mundo!";
+write "Hola";
 contador: 0;
 
 actual: 999;

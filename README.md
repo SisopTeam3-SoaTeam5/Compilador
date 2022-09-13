@@ -127,7 +127,7 @@ Fecha de entrega: 07/11/2022
 
 - Float (32 bits): el separador decimal será el punto “.”
 - Int (16 bits)
-- String: constantes de 40 caracteres alfanuméricos como máximo, limitada por comillas (“ “) ,de la forma “XXXX”
+- ~~String: constantes de 40 caracteres alfanuméricos como máximo, limitada por comillas (“ “) ,de la forma “XXXX”~~
 
 [Ejemplo](src/test/resources/assignments.txt)
 
@@ -171,8 +171,7 @@ Las condiciones múltiples pueden ser hasta dos condiciones simples ligadas a tr
 
 ~~[Ejemplo OR](src/test/resources/or.txt)~~
 
-[Ejemplo NOT](src/test/resources/not.txt)
- --> Faltaria ver si solo se puede hacer con comparaciones
+~~[Ejemplo NOT](src/test/resources/not.txt)~~
 
 
 ### Tabla de Símbolos
