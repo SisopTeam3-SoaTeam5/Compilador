@@ -1,9 +1,15 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
-
+import lyc.compiler.files.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 class Parser;
 
+action code {:
+    //HashMap<String, SymbolInfo> symbolMap = SymbolTable.symbolMap;
+    //List<String> idList = new ArrayList<>();
+:}
 
 // Terminals
 terminal INIT;
@@ -96,13 +102,25 @@ sentencia ::= all_equal {: System.out.println("sentencia ::= all_equal"); :};
 linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
 linea ::= escritura {: System.out.println("linea ::= escritura"); :};
 linea ::= lectura {: System.out.println("linea ::= lectura"); :};
-declaracion ::= list_identifier:l ASSIG type:t SEMICOLON {:
-                                                        SymbolTable.insert(l,t );
-                                                        System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON");
-                                                           :};
-list_identifier ::= IDENTIFIER{: System.out.println("list_identifier ::= IDENTIFIER"); :};
-list_identifier ::= list_identifier COMMA IDENTIFIER {: System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier"); :};
-type ::= INTEGER | FLOAT | STRING {: System.out.println("type ::= INTEGER | FLOAT | STRING"); :};
+declaracion ::= list_identifier ASSIG type SEMICOLON {:System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON");:};
+list_identifier ::= IDENTIFIER:id{:
+                                     System.out.println("list_identifier ::= IDENTIFIER"+id);
+                                     SymbolTable.symbolStack.push(id.toString());
+                                     :};
+
+list_identifier ::= list_identifier COMMA IDENTIFIER:id {:
+                                    System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier");
+                                    SymbolTable.symbolStack.push(id.toString());:};
+type ::= INTEGER                  {:
+                                    SymbolTable.insert("Integer");
+                                    System.out.println("type ::= INTEGER");
+                                    :};
+type ::= FLOAT                  {:SymbolTable.insert("Float");
+                                     System.out.println("type ::= FLOAT");
+                                     :};
+type ::= STRING                 {:SymbolTable.insert("String");
+                                     System.out.println("type ::= STRING");
+                                     :};
 asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
 asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
