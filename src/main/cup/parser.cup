@@ -83,6 +83,7 @@ start with sta;
 
 sta ::= programa {: System.out.println("sta ::= programa"); :};
 programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
+programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
 programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
 bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :};
 declaraciones ::= declaracion {: System.out.println("declaraciones ::= declaracion"); :};
@@ -93,7 +94,6 @@ sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOL
 sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
 sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
-sentencia ::= all_equal {: System.out.println("sentencia ::= all_equal"); :};
 linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
 linea ::= escritura {: System.out.println("linea ::= escritura"); :};
 linea ::= lectura {: System.out.println("linea ::= lectura"); :};

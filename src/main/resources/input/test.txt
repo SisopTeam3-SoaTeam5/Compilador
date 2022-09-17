@@ -1,43 +1,43 @@
 init {
-    contador: Integer;
-    promedio: Float;
-    actual, suma: Float;
-    nombre: String;
+    contador= Integer;
+    promedio= Float;
+    actual, suma= Float;
+    nombre= String;
 }
-contador: (0+3)*1;
+contador= (0+3)*1;
 write "Hola";
 write a;
 write (a+b)*c;
-contador: 0;
+contador= 0;
 
-a:AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
+a=AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
 if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
-    a: -3;
+    a= -3;
 }
 
 DO a
 CASE a==101
-a:1;
+a=1;
 CASE a>202
-a:2;
+a=2;
 DEFAULT
-a:3;
+a=3;
 ENDDO
 
 
-actual: 999;
-suma: 02;
-contador: contador+1;
-nombre: "Charles Leclerc";
+actual= 999;
+suma= 02;
+contador= contador+1;
+nombre= "Charles Leclerc";
 read(base);
 
 while (contador <= 92 && suma < 1) {
-    contador: contador + 1;
-    actual: (contador/0.342) + (contador*contador);
-    suma: suma + actual;
+    contador= contador + 1;
+    actual= (contador/0.342) + (contador*contador);
+    suma= suma + actual;
     }
 
-write "La suma es: ";
+write "La suma es= ";
 write suma;
 
 if (! actual > 2){
@@ -60,5 +60,5 @@ if (actual < 3){
         write "soy true";
     }
 }else{
-    actual:333.3333;
+    actual=333.3333;
 }

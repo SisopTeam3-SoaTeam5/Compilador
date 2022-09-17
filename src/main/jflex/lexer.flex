@@ -39,7 +39,7 @@ Plus = "+"
 Mult = "*"
 Sub = "-"
 Div = "/"
-Assig = ":"
+Assig = "="
 OpenBracket = "("
 CloseBracket = ")"
 SquareOpenBracket = "["
@@ -65,7 +65,7 @@ WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
 FloatConstant = {Digit}+"."{Digit}+
-Content =  ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConstant} | {Operator} | {OpenBracket} | {CloseBracket} )*
+Content =  (.)*
 StringConstant = "\"" {Content} "\""
 Comment = "/*" {Content} "*/"
 %%
