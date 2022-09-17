@@ -2,7 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
-import lyc.compiler.model.*;
+import lyc.compiler.files.SymbolInfo;import lyc.compiler.files.SymbolTable;import lyc.compiler.model.*;
 import static lyc.compiler.constants.Constants.*;
 
 %%
@@ -74,9 +74,18 @@ Comment = "/*" {Content} "*/"
 <YYINITIAL>{
     /*Keywords*/
     "init"                                  {return symbol(ParserSym.INIT);}
-    "Integer"                               {return symbol(ParserSym.INTEGER);}
-    "Float"                                 {return symbol(ParserSym.FLOAT);}
-    "String"                                {return symbol(ParserSym.STRING);}
+    "Integer"                               {
+                                                SymbolTable.insert("Integer");
+                                                return symbol(ParserSym.INTEGER);
+                                            }
+    "Float"                                 {
+                                                SymbolTable.insert("Float");
+                                                return symbol(ParserSym.FLOAT);
+                                            }
+    "String"                                {
+                                                SymbolTable.insert("String");
+                                                return symbol(ParserSym.STRING);
+                                            }
     "if"                                    {return symbol(ParserSym.IF);}
     "else"                                  {return symbol(ParserSym.ELSE);}
     "while"                                 {return symbol(ParserSym.WHILE);}
@@ -89,7 +98,13 @@ Comment = "/*" {Content} "*/"
     "AllEqual"                              {return symbol(ParserSym.ALLEQUAL);}
 
     /* identifiers */
-    {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
+    {Identifier}                             {
+                                                        String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
+                                                        if(s.length()<=20){
+                                                            SymbolTable.symbolStack.push(s);
+                                                            return symbol(ParserSym.IDENTIFIER, yytext());
+                                                            }
+                                                        else throw  new RuntimeException("Identificadores deben tener 20 bits o menos"); }
     /* Constants */
     {IntegerConstant}                        {
                                                 Integer i = new Integer(yytext());

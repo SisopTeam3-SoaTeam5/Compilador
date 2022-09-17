@@ -135,4 +135,4 @@ term ::= factor {: System.out.println("term ::= factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET"); :};
+factor ::= OPEN_BRACKET expression:e CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET :expression ==> " + e); :};

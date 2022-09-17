@@ -4,7 +4,7 @@ init {
     actual, suma: Float;
     nombre: String;
 }
-
+contador: (0+3)*1;
 write "Hola";
 write a;
 write (a+b)*c;
