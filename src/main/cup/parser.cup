@@ -122,7 +122,10 @@ type ::= STRING                 {:SymbolTable.insert("String");
                                      System.out.println("type ::= STRING");
                                      :};
 asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
-asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
+asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
+                                                SymbolTable.insertString(id.toString(),str.toString());
+                                                System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT");
+                                                :};
 asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};

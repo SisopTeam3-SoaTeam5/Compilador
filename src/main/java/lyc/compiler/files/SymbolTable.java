@@ -18,4 +18,11 @@ public class SymbolTable {
         }
     }
 
+    public static void insertString(String id,String value){
+        SymbolInfo data=symbolMap.get(id);
+        data.setValue(value);
+        data.setLength(value.length());
+        symbolMap.put(id,data);
+    }
+
 }
