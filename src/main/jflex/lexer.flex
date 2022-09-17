@@ -100,13 +100,14 @@ Comment = "/*" {Content} "*/"
                                                         if(s.length()<=20){
                                                             return symbol(ParserSym.IDENTIFIER, yytext());
                                                             }
-                                                        else throw  new RuntimeException("Identificadores deben tener 20 bits o menos"); }
+                                                        else throw  new InvalidLengthException("Identificadores deben tener 20 caracteres o menos"); }
     /* Constants */
     {IntegerConstant}                        {
-                                                Integer i = new Integer(yytext());
-                                                if(Integer.toBinaryString(i).toString().length() <= 16)
+                                                Long i = new Long(yytext());
+                                                System.out.println("numero: " + yytext());
+                                                if(Long.toBinaryString(i).toString().length() <= 16)
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
-                                                else throw new RuntimeException("Constantes Integer deben tener 16 bits o menos"); }
+                                                else throw new InvalidIntegerException("Constantes Integer deben tener 16 bits o menos"); }
     {FloatConstant}                          {  int bits = Float.floatToIntBits(new Float(yytext()));
                                                 if(Integer.toBinaryString(bits).length() <= 32) //chequear esto, esta medio fafafa
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
@@ -114,12 +115,12 @@ Comment = "/*" {Content} "*/"
     {StringConstant}                         {  String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
                                                 if(s.length()<=42) // 42 para no contar ambas comillas ""
                                                     return symbol(ParserSym.STRING_CONSTANT, yytext());
-                                                else throw new RuntimeException("Constantes String tienen que tener longitud menor o igual a 40 caracteres");
+                                                else throw new InvalidLengthException("Constantes String tienen que tener longitud menor o igual a 40 caracteres");
                                              }
 
     /* operators */
     {Plus}                                    { return symbol(ParserSym.PLUS); }
-    {Sub}                                     { return symbol(ParserSym.SUB); }
+    {Sub}                                     { System.out.println("entre al menos");return symbol(ParserSym.SUB); }
     {Mult}                                    { return symbol(ParserSym.MULT); }
     {Div}                                     { return symbol(ParserSym.DIV); }
     {Assig}                                   { return symbol(ParserSym.ASSIG); }
@@ -142,4 +143,5 @@ Comment = "/*" {Content} "*/"
     {Comma}                                   { return symbol(ParserSym.COMMA); }
     {Comment}                                 { /* ignore comments */ } //Parece como que no funciona ignorar para ninguno de los dos casos
     {WhiteSpace}                              { /* ignore whitespaces */ }
+     .                                        {throw new UnknownCharacterException(yytext());}
 }

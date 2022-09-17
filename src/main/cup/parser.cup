@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 class Parser;
 
-action code {:
-    //HashMap<String, SymbolInfo> symbolMap = SymbolTable.symbolMap;
-    //List<String> idList = new ArrayList<>();
-:}
-
 // Terminals
 terminal INIT;
 terminal INTEGER;
@@ -158,5 +153,6 @@ term ::= term DIV factor {: System.out.println("term ::= term DIV factor"); :};
 term ::= factor {: System.out.println("term ::= factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
+factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("factor ::= SUB INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
 factor ::= OPEN_BRACKET expression:e CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET :expression ==> " + e); :};

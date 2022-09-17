@@ -12,7 +12,7 @@ contador: 0;
 
 a:AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
 if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
-    a: a;
+    a: -3;
 }
 
 DO a
