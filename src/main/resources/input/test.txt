@@ -8,7 +8,7 @@ init {
 	errorLongString= String;
 	
 	/* Test error en longitud de nombre de variables: no deben superar los 20 caracteres */
-	/* errorVariableNameTooLong: Integer */
+	/*errorVariableNameTooLong: Integer;*/
 }
 
 contador= (0+3)*1;
@@ -77,8 +77,8 @@ if (actual < 3){
 /*actual := 999;*/
 
 /*Test errores en longitud: Se prueba la asignacion de valores que superen el largo permitido*/
-/*errorLongInt= 9999999999999999; */
-/* errorLongInt= 99999999.99999999; */
+/*errorLongInt= 9999999999999999;*/
+/*errorLongFloat= 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999.99;*/
 /* errorLongString= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; */
 
 /*Test errores en sintaxis de WHILE*/

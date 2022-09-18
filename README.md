@@ -125,7 +125,7 @@ Fecha de entrega: 07/11/2022
 ### Tipos de datos
 * Queda verificar los bits de cada uno
 
-- ~~Float (32 bits): el separador decimal será el punto “.”~~ Chequear que esto este bien xd
+- ~~Float (32 bits): el separador decimal será el punto “.”~~ 
 - ~~Int (16 bits)~~
 - ~~String: constantes de 40 caracteres alfanuméricos como máximo, limitada por comillas (“ “) ,de la forma “XXXX”~~
 

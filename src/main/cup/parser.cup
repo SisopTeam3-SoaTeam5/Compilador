@@ -155,4 +155,5 @@ factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" +
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("factor ::= SUB INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
+factor ::= SUB FLOAT_CONSTANT:constant {: System.out.println("factor ::= SUB FLOAT_CONSTANT:constant ==>" + constant ); :};
 factor ::= OPEN_BRACKET expression:e CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET :expression ==> " + e); :};

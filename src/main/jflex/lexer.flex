@@ -108,8 +108,8 @@ Comment = "/*" {Content} "*/"
                                                 if(Long.toBinaryString(i).toString().length() <= 16)
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
                                                 else throw new InvalidIntegerException("Constantes Integer deben tener 16 bits o menos"); }
-    {FloatConstant}                          {  int bits = Float.floatToIntBits(new Float(yytext()));
-                                                if(Integer.toBinaryString(bits).length() <= 32) //chequear esto, esta medio fafafa
+    {FloatConstant}                          {  Double f = new Double(yytext());
+                                                if(f < Float.MAX_VALUE) //chequear esto, esta medio fafafa
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                                 else throw  new RuntimeException("Constantes Float deben tener 32 bits o menos"); }
     {StringConstant}                         {  String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
@@ -120,7 +120,7 @@ Comment = "/*" {Content} "*/"
 
     /* operators */
     {Plus}                                    { return symbol(ParserSym.PLUS); }
-    {Sub}                                     { System.out.println("entre al menos");return symbol(ParserSym.SUB); }
+    {Sub}                                     { return symbol(ParserSym.SUB); }
     {Mult}                                    { return symbol(ParserSym.MULT); }
     {Div}                                     { return symbol(ParserSym.DIV); }
     {Assig}                                   { return symbol(ParserSym.ASSIG); }
