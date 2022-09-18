@@ -82,7 +82,7 @@ errorLongString: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     actual: (contador/0.342) + (contador*contador);
     suma: suma + actual;*/
 /*Funcion incompleta*/
-/*while (contador)*/	
+/*while (contador)*/
 /*Funcion sin condicion*/
 /*while () {
     contador: contador + 1;
@@ -103,7 +103,7 @@ errorLongString: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 /*Funcion sin condicion:*/
 /*if {
     write "prueba";
-}*/	
+}*/
 /*Funcion sin accion a realizar en caso de true:/*
 /*if (! actual > 2){}*/
 

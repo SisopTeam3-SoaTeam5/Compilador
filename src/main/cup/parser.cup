@@ -1,9 +1,10 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
-
+import lyc.compiler.files.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 class Parser;
-
 
 // Terminals
 terminal INIT;
@@ -82,6 +83,7 @@ start with sta;
 
 sta ::= programa {: System.out.println("sta ::= programa"); :};
 programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
+programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
 programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
 bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :};
 declaraciones ::= declaracion {: System.out.println("declaraciones ::= declaracion"); :};
@@ -92,16 +94,33 @@ sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOL
 sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
 sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
-sentencia ::= all_equal {: System.out.println("sentencia ::= all_equal"); :};
 linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
 linea ::= escritura {: System.out.println("linea ::= escritura"); :};
 linea ::= lectura {: System.out.println("linea ::= lectura"); :};
-declaracion ::= list_identifier ASSIG type SEMICOLON {: System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON"); :};
-list_identifier ::= IDENTIFIER{: System.out.println("list_identifier ::= IDENTIFIER"); :};
-list_identifier ::= list_identifier COMMA IDENTIFIER {: System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier"); :};
-type ::= INTEGER | FLOAT | STRING {: System.out.println("type ::= INTEGER | FLOAT | STRING"); :};
+declaracion ::= list_identifier ASSIG type SEMICOLON {:System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON");:};
+list_identifier ::= IDENTIFIER:id{:
+                                     System.out.println("list_identifier ::= IDENTIFIER"+id);
+                                     SymbolTable.symbolStack.push(id.toString());
+                                     :};
+
+list_identifier ::= list_identifier COMMA IDENTIFIER:id {:
+                                    System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier");
+                                    SymbolTable.symbolStack.push(id.toString());:};
+type ::= INTEGER                  {:
+                                    SymbolTable.insert("Integer");
+                                    System.out.println("type ::= INTEGER");
+                                    :};
+type ::= FLOAT                  {:SymbolTable.insert("Float");
+                                     System.out.println("type ::= FLOAT");
+                                     :};
+type ::= STRING                 {:SymbolTable.insert("String");
+                                     System.out.println("type ::= STRING");
+                                     :};
 asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
-asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
+asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
+                                                SymbolTable.insertString(id.toString(),str.toString());
+                                                System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT");
+                                                :};
 asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
@@ -134,5 +153,6 @@ term ::= term DIV factor {: System.out.println("term ::= term DIV factor"); :};
 term ::= factor {: System.out.println("term ::= factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" + id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
+factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("factor ::= SUB INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
 factor ::= OPEN_BRACKET expression:e CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET :expression ==> " + e); :};

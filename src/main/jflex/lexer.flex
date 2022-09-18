@@ -2,7 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
-import lyc.compiler.files.SymbolInfo;import lyc.compiler.files.SymbolTable;import lyc.compiler.model.*;
+import lyc.compiler.files.SymbolInfo;import lyc.compiler.model.*;
 import static lyc.compiler.constants.Constants.*;
 
 %%
@@ -39,7 +39,7 @@ Plus = "+"
 Mult = "*"
 Sub = "-"
 Div = "/"
-Assig = ":"
+Assig = "="
 OpenBracket = "("
 CloseBracket = ")"
 SquareOpenBracket = "["
@@ -65,7 +65,7 @@ WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
 FloatConstant = {Digit}+"."{Digit}+
-Content =  ({WhiteSpace} | {Letter} | {IntegerConstant} | {FloatConstant} | {Operator} | {OpenBracket} | {CloseBracket} )*
+Content =  (.)*
 StringConstant = "\"" {Content} "\""
 Comment = "/*" {Content} "*/"
 %%
@@ -75,15 +75,12 @@ Comment = "/*" {Content} "*/"
     /*Keywords*/
     "init"                                  {return symbol(ParserSym.INIT);}
     "Integer"                               {
-                                                SymbolTable.insert("Integer");
                                                 return symbol(ParserSym.INTEGER);
                                             }
     "Float"                                 {
-                                                SymbolTable.insert("Float");
                                                 return symbol(ParserSym.FLOAT);
                                             }
     "String"                                {
-                                                SymbolTable.insert("String");
                                                 return symbol(ParserSym.STRING);
                                             }
     "if"                                    {return symbol(ParserSym.IF);}
@@ -101,16 +98,16 @@ Comment = "/*" {Content} "*/"
     {Identifier}                             {
                                                         String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
                                                         if(s.length()<=20){
-                                                            SymbolTable.symbolStack.push(s);
                                                             return symbol(ParserSym.IDENTIFIER, yytext());
                                                             }
-                                                        else throw  new RuntimeException("Identificadores deben tener 20 bits o menos"); }
+                                                        else throw  new InvalidLengthException("Identificadores deben tener 20 caracteres o menos"); }
     /* Constants */
     {IntegerConstant}                        {
-                                                Integer i = new Integer(yytext());
-                                                if(Integer.toBinaryString(i).toString().length() <= 16)
+                                                Long i = new Long(yytext());
+                                                System.out.println("numero: " + yytext());
+                                                if(Long.toBinaryString(i).toString().length() <= 16)
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
-                                                else throw new RuntimeException("Constantes Integer deben tener 16 bits o menos"); }
+                                                else throw new InvalidIntegerException("Constantes Integer deben tener 16 bits o menos"); }
     {FloatConstant}                          {  int bits = Float.floatToIntBits(new Float(yytext()));
                                                 if(Integer.toBinaryString(bits).length() <= 32) //chequear esto, esta medio fafafa
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
@@ -118,12 +115,12 @@ Comment = "/*" {Content} "*/"
     {StringConstant}                         {  String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
                                                 if(s.length()<=42) // 42 para no contar ambas comillas ""
                                                     return symbol(ParserSym.STRING_CONSTANT, yytext());
-                                                else throw new RuntimeException("Constantes String tienen que tener longitud menor o igual a 40 caracteres");
+                                                else throw new InvalidLengthException("Constantes String tienen que tener longitud menor o igual a 40 caracteres");
                                              }
 
     /* operators */
     {Plus}                                    { return symbol(ParserSym.PLUS); }
-    {Sub}                                     { return symbol(ParserSym.SUB); }
+    {Sub}                                     { System.out.println("entre al menos");return symbol(ParserSym.SUB); }
     {Mult}                                    { return symbol(ParserSym.MULT); }
     {Div}                                     { return symbol(ParserSym.DIV); }
     {Assig}                                   { return symbol(ParserSym.ASSIG); }
@@ -146,4 +143,5 @@ Comment = "/*" {Content} "*/"
     {Comma}                                   { return symbol(ParserSym.COMMA); }
     {Comment}                                 { /* ignore comments */ } //Parece como que no funciona ignorar para ninguno de los dos casos
     {WhiteSpace}                              { /* ignore whitespaces */ }
+     .                                        {throw new UnknownCharacterException(yytext());}
 }
