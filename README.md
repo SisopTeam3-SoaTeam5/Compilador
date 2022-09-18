@@ -108,27 +108,31 @@ Fecha de entrega: 07/11/2022
 
 ## Temas comunes
 
-### While
+### ~~While~~
 
 [Ejemplo](src/test/resources/while.txt)
 
-### If
+### ~~If~~
 
 [Ejemplo](src/test/resources/if.txt)
 
 ### Asignaciones
+* cambiar el lexema
+* que se puedan hacer varias en la misma sentencia
 
 [Ejemplo](src/test/resources/assignments.txt)
 
 ### Tipos de datos
+* Queda verificar los bits de cada uno
 
-- Float (32 bits): el separador decimal será el punto “.”
-- Int (16 bits)
-- String: constantes de 40 caracteres alfanuméricos como máximo, limitada por comillas (“ “) ,de la forma “XXXX”
+- ~~Float (32 bits): el separador decimal será el punto “.”~~ 
+- ~~Int (16 bits)~~
+- ~~String: constantes de 40 caracteres alfanuméricos como máximo, limitada por comillas (“ “) ,de la forma “XXXX”~~
 
 [Ejemplo](src/test/resources/assignments.txt)
 
-### Declaración de variables
+### ~~Declaración de variables~~
+
 Todas las variables deberán ser declaradas dentro de un bloque especial para ese fin,
 delimitado por la palabra reservada init dentro de un bloque delimitado por llaves.
 
@@ -142,13 +146,15 @@ IMPORTANTE: Las variables no guardan su valor en tabla de símbolos.
 Las asignaciones deben ser permitidas, solo en los casos en los que los tipos son compatibles, caso contrario deberá desplegarse un error.
 
 ### Comentarios
+* ver por que no se ignora, mismo problema con los enter
+
 Deberán estar delimitados por `/*` y `*/` y podrán estar anidados en un solo nivel.
 
 [Ejemplo Comentario](src/test/resources/comment.txt)
 
 Nota: Los comentarios se ignoran, de manera que no generan un componente léxico o token
 
-### Entrada y salida
+### ~~Entrada y salida~~
 Las salidas y entradas por teclado se implementarán como se muestra en el siguiente ejemplo:
 
 [Ejemplo Entrada](src/test/resources/read.txt)
@@ -157,14 +163,15 @@ Las salidas y entradas por teclado se implementarán como se muestra en el sigui
 
 
 ### Condiciones
+
 Las condiciones para un constructor de ciclos o de selección pueden ser simples ( a < b )  o múltiples.
 Las condiciones múltiples pueden ser hasta dos condiciones simples ligadas a través del operador lógico (AND, OR) o una condición simple con el operador lógico NOT
 
-[Ejemplo AND](src/test/resources/and.txt)
+~~[Ejemplo AND](src/test/resources/and.txt)~~
 
-[Ejemplo OR](src/test/resources/or.txt)
+~~[Ejemplo OR](src/test/resources/or.txt)~~
 
-[Ejemplo NOT](src/test/resources/not.txt)
+~~[Ejemplo NOT](src/test/resources/not.txt)~~
 
 
 ### Tabla de Símbolos
@@ -183,6 +190,8 @@ Esta función del lenguaje tomará como entrada una expresión (pivot)  y una li
 `#Iguales ( a+w/b, [(d-3)*2,e,f] )  = 2 si  (a+w/b = (d-3)*2 ) & (a+w/b =f) & (a+w/b ≠ e)`
 
 ### AllEqual
+* queda todo
+
 Esta función del lenguaje tomará como entrada dos a más listas de expresiones y devolverá verdadero si cada elemento en orden posicional es igual a su par correspondiente en cada   una de las listas. Caso contrario: Falso. La cantidad de listas es indefinida.
 
 **Ejemplo:**
@@ -190,7 +199,8 @@ Esta función del lenguaje tomará como entrada dos a más listas de expresiones
 `AllEqual ( [a+w,b,c], [(d-3)*2,e,f], [g,h,i] )  es True si (a+w = (d-3)*2 = g) & (b = e = h) & (c=f=i)
 `
 
-### Case
+### ~~Case~~
+* queda revisar que ande piola con los enters pero ya estaria
 Se deberá implementar la sentencia DO CASE con la última cláusula DEFAULT, que será opcional
 Ejemplo:
 

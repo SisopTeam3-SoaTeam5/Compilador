@@ -2,7 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
-import lyc.compiler.model.*;
+import lyc.compiler.files.SymbolInfo;import lyc.compiler.model.*;
 import static lyc.compiler.constants.Constants.*;
 
 %%
@@ -32,6 +32,8 @@ import static lyc.compiler.constants.Constants.*;
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 Identation =  [ \t\f]
+Comma =  ","
+SemiColon = ";"
 
 Plus = "+"
 Mult = "*"
@@ -40,37 +42,106 @@ Div = "/"
 Assig = "="
 OpenBracket = "("
 CloseBracket = ")"
+SquareOpenBracket = "["
+SquareCloseBracket = "]"
+OpenBlock= "{"
+CloseBlock= "}"
 Letter = [a-zA-Z]
 Digit = [0-9]
+
+GreaterThan = ">"
+LessThan = "<"
+GreaterOrEqual = ">="
+LessOrEqual = "<="
+NotEqual = "!="
+Equal = "=="
+Not = "!"
+AND = "&&"
+OR = "||"
+
+Operator = {GreaterThan} | {LessThan} | {GreaterOrEqual} | {LessOrEqual} | {NotEqual} | {Equal} | {Plus} | {Mult} | {Sub} | {Div} | {Assig} | {Not}
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
-
+FloatConstant = {Digit}+"."{Digit}+
+Content =  (.)*
+StringConstant = "\"" {Content} "\""
+Comment = "/*" {Content} "*/"
 %%
 
 
-/* keywords */
+<YYINITIAL>{
+    /*Keywords*/
+    "init"                                  {return symbol(ParserSym.INIT);}
+    "Integer"                               {
+                                                return symbol(ParserSym.INTEGER);
+                                            }
+    "Float"                                 {
+                                                return symbol(ParserSym.FLOAT);
+                                            }
+    "String"                                {
+                                                return symbol(ParserSym.STRING);
+                                            }
+    "if"                                    {return symbol(ParserSym.IF);}
+    "else"                                  {return symbol(ParserSym.ELSE);}
+    "while"                                 {return symbol(ParserSym.WHILE);}
+    "write"                                 {return symbol(ParserSym.WRITE);}
+    "read"                                  {return symbol(ParserSym.READ);}
+    "DO"                                    {return symbol(ParserSym.DO);}
+    "ENDDO"                                 {return symbol(ParserSym.ENDDO);}
+    "CASE"                                  {return symbol(ParserSym.CASE);}
+    "DEFAULT"                               {return symbol(ParserSym.DEFAULT);}
+    "AllEqual"                              {return symbol(ParserSym.ALLEQUAL);}
 
-<YYINITIAL> {
-  /* identifiers */
-  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
-  /* Constants */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+    /* identifiers */
+    {Identifier}                             {
+                                                        String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
+                                                        if(s.length()<=20){
+                                                            return symbol(ParserSym.IDENTIFIER, yytext());
+                                                            }
+                                                        else throw  new InvalidLengthException("Identificadores deben tener 20 caracteres o menos"); }
+    /* Constants */
+    {IntegerConstant}                        {
+                                                Long i = new Long(yytext());
+                                                System.out.println("numero: " + yytext());
+                                                if(Long.toBinaryString(i).toString().length() <= 16)
+                                                    return symbol(ParserSym.INTEGER_CONSTANT, yytext());
+                                                else throw new InvalidIntegerException("Constantes Integer deben tener 16 bits o menos"); }
+    {FloatConstant}                          {  Double f = new Double(yytext());
+                                                if(f < Float.MAX_VALUE) //chequear esto, esta medio fafafa
+                                                    return symbol(ParserSym.FLOAT_CONSTANT, yytext());
+                                                else throw  new RuntimeException("Constantes Float deben tener 32 bits o menos"); }
+    {StringConstant}                         {  String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
+                                                if(s.length()<=42) // 42 para no contar ambas comillas ""
+                                                    return symbol(ParserSym.STRING_CONSTANT, yytext());
+                                                else throw new InvalidLengthException("Constantes String tienen que tener longitud menor o igual a 40 caracteres");
+                                             }
 
-  /* operators */
-  {Plus}                                    { return symbol(ParserSym.PLUS); }
-  {Sub}                                     { return symbol(ParserSym.SUB); }
-  {Mult}                                    { return symbol(ParserSym.MULT); }
-  {Div}                                     { return symbol(ParserSym.DIV); }
-  {Assig}                                   { return symbol(ParserSym.ASSIG); }
-  {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
-  {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
-
-  /* whitespace */
-  {WhiteSpace}                   { /* ignore */ }
+    /* operators */
+    {Plus}                                    { return symbol(ParserSym.PLUS); }
+    {Sub}                                     { return symbol(ParserSym.SUB); }
+    {Mult}                                    { return symbol(ParserSym.MULT); }
+    {Div}                                     { return symbol(ParserSym.DIV); }
+    {Assig}                                   { return symbol(ParserSym.ASSIG); }
+    {SemiColon}                               { return symbol(ParserSym.SEMICOLON);}
+    {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
+    {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
+    {SquareOpenBracket}                       { return symbol(ParserSym.SQUARE_OPEN_BRACKET); }
+    {SquareCloseBracket}                      { return symbol(ParserSym.SQUARE_CLOSE_BRACKET); }
+    {GreaterThan}                             { return symbol(ParserSym.GREATER_THAN); }
+    {LessThan}                                { return symbol(ParserSym.LESS_THAN); }
+    {GreaterOrEqual}                          { return symbol(ParserSym.GREATER_OR_EQUAL); }
+    {LessOrEqual}                             { return symbol(ParserSym.LESS_OR_EQUAL); }
+    {NotEqual}                                { return symbol(ParserSym.NOT_EQUAL); }
+    {Equal}                                   { return symbol(ParserSym.EQUAL); }
+    {Not}                                     { return symbol(ParserSym.NOT); }
+    {AND}                                     { return symbol(ParserSym.AND); }
+    {OR}                                      { return symbol(ParserSym.OR); }
+    {OpenBlock}                               { return symbol(ParserSym.OPEN_BLOCK); }
+    {CloseBlock}                              { return symbol(ParserSym.CLOSE_BLOCK); }
+    {Comma}                                   { return symbol(ParserSym.COMMA); }
+    {Comment}                                 { /* ignore comments */ } //Parece como que no funciona ignorar para ninguno de los dos casos
+    {WhiteSpace}                              { /* ignore whitespaces */ }
+     .                                        {throw new UnknownCharacterException(yytext());}
 }
-
-
-/* error fallback */
-[^]                              { throw new UnknownCharacterException(yytext()); }

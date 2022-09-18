@@ -1,10 +1,12 @@
 package lyc.compiler.main;
 
+import java_cup.runtime.Symbol;
 import lyc.compiler.Parser;
 import lyc.compiler.factories.FileFactory;
 import lyc.compiler.factories.ParserFactory;
 import lyc.compiler.files.FileOutputWriter;
 import lyc.compiler.files.SymbolTableGenerator;
+import lyc.compiler.model.CompilerException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -29,7 +31,7 @@ public final class Compiler {
             System.err.println("There was an error trying to read input file " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.err.println("Compilation error: " + e.getMessage());
+            System.out.println("Compilation error: " + e.getMessage());
             System.exit(0);
         }
 

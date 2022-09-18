@@ -1,1 +1,2 @@
 /* Esto es un comentario */
+a = 2; /* No aceptamos compilar archivos vacios */

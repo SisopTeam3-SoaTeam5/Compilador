@@ -1,11 +1,21 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
-
+import lyc.compiler.files.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 class Parser;
 
-
 // Terminals
+terminal INIT;
+terminal INTEGER;
+terminal FLOAT;
+terminal STRING;
+terminal IF;
+terminal ELSE;
+terminal WHILE;
+terminal WRITE;
+terminal READ;
 terminal ASSIG;
 terminal PLUS;
 terminal SUB;
@@ -14,26 +24,136 @@ terminal DIV;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal INTEGER_CONSTANT;
+terminal FLOAT_CONSTANT;
+terminal STRING_CONSTANT;
 terminal IDENTIFIER;
+terminal GREATER_THAN;
+terminal LESS_THAN;
+terminal GREATER_OR_EQUAL;
+terminal LESS_OR_EQUAL;
+terminal NOT_EQUAL;
+terminal EQUAL;
+terminal NOT;
+terminal AND;
+terminal OR;
+terminal OPEN_BLOCK;
+terminal CLOSE_BLOCK;
+terminal COMMA;
+terminal SEMICOLON;
+terminal DO;
+terminal ENDDO;
+terminal CASE;
+terminal DEFAULT;
+terminal ALLEQUAL;
+terminal SQUARE_OPEN_BRACKET;
+terminal SQUARE_CLOSE_BRACKET;
 
 // Non Terminals
-non terminal sentence;
-non terminal assignment;
+non terminal sta;
+non terminal programa;
+non terminal bloquecod;
+non terminal bloquedec;
+non terminal declaraciones;
+non terminal sentencia;
+non terminal linea;
+non terminal pregunta;
+non terminal loop;
+non terminal declaracion;
+non terminal list_identifier;
+non terminal asignacion;
+non terminal escritura;
+non terminal lectura;
+non terminal type;
+non terminal comparacion;
+non terminal comparador;
 non terminal expression;
 non terminal term;
 non terminal factor;
+non terminal logical;
+non terminal condicion;
+non terminal switch;
+non terminal lista_casos;
+non terminal all_equal;
+non terminal all_equal_params;
+non terminal array_expresiones;
+non terminal lista_expresiones;
 
 // Start Symbol Definition
-start with sentence;
+start with sta;
 
-sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
-expression ::= expression PLUS term {: System.out.println("+"); :};
-expression ::= expression SUB term {: System.out.println("-"); :};
-expression ::= term {: System.out.println("Expression = Term"); :};
-term ::= term MULT factor {: System.out.println("*"); :};
-term ::= term DIV factor {: System.out.println("/"); :};
-term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+sta ::= programa {: System.out.println("sta ::= programa"); :};
+programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
+programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
+programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
+bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK {: System.out.println("bloquedec ::= INIT OPEN_BLOCK declaraciones CLOSE_BLOCK"); :};
+declaraciones ::= declaracion {: System.out.println("declaraciones ::= declaracion"); :};
+declaraciones ::= declaraciones declaracion {: System.out.println("declaraciones ::= declaraciones declaracion"); :};
+bloquecod ::= sentencia {: System.out.println("bloquecod ::= sentencia"); :};
+bloquecod ::= bloquecod sentencia {: System.out.println("bloquecod ::= bloquecod sentencia"); :};
+sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOLON"); :};
+sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
+sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
+sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
+linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
+linea ::= escritura {: System.out.println("linea ::= escritura"); :};
+linea ::= lectura {: System.out.println("linea ::= lectura"); :};
+declaracion ::= list_identifier ASSIG type SEMICOLON {:System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON");:};
+list_identifier ::= IDENTIFIER:id{:
+                                     System.out.println("list_identifier ::= IDENTIFIER"+id);
+                                     SymbolTable.symbolStack.push(id.toString());
+                                     :};
+
+list_identifier ::= list_identifier COMMA IDENTIFIER:id {:
+                                    System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier");
+                                    SymbolTable.symbolStack.push(id.toString());:};
+type ::= INTEGER                  {:
+                                    SymbolTable.insert("Integer");
+                                    System.out.println("type ::= INTEGER");
+                                    :};
+type ::= FLOAT                  {:SymbolTable.insert("Float");
+                                     System.out.println("type ::= FLOAT");
+                                     :};
+type ::= STRING                 {:SymbolTable.insert("String");
+                                     System.out.println("type ::= STRING");
+                                     :};
+asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
+asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
+                                                SymbolTable.insertString(id.toString(),str.toString());
+                                                System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT");
+                                                :};
+asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
+escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
+escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
+lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
+pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK {: System.out.println("loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO"); :};
+switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
+lista_casos ::= lista_casos CASE comparacion bloquecod {: System.out.println("lista_casos ::= lista_casos CASE comparacion bloquecod"); :};
+lista_casos ::= CASE comparacion bloquecod {: System.out.println("lista_casos ::= CASE comparacion bloquecod"); :};
+all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
+all_equal_params ::= all_equal_params COMMA array_expresiones {: System.out.println("all_equal_params ::= all_equal_params COMMA array_expresiones"); :};
+all_equal_params ::= array_expresiones COMMA array_expresiones {: System.out.println("all_equal_params ::= array_expresiones"); :};
+array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
+lista_expresiones ::= lista_expresiones COMMA expression {: System.out.println("lista_expresiones ::= lista_expresiones COMMA expression "); :};
+lista_expresiones ::= expression {: System.out.println("lista_expresiones ::= lista_expresiones"); :};
+condicion ::= comparacion {: System.out.println("condicion ::= comparacion"); :};
+condicion ::= comparacion logical comparacion {: System.out.println("condicion ::= comparacion logical comparacion"); :};
+condicion ::= NOT comparacion {: System.out.println("condicion ::= NOT comparacion "); :}; //REVISAR ESTA, ESTA RARI
+logical ::= AND | OR {: System.out.println("logical ::= AND | OR"); :};
+comparacion ::= expression comparador expression {: System.out.println("comparacion ::= expression comparador expression"); :};
+comparacion ::= all_equal {: System.out.println("comparacion ::= expression comparador expression"); :};
+comparador ::= GREATER_THAN | LESS_THAN | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL | EQUAL {: System.out.println("comparador ::= GREATER_THAN | LESS_THAN | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL | EQUAL"); :};
+expression ::= expression PLUS term {: System.out.println("expression ::= expression PLUS term "); :};
+expression ::= expression SUB term {: System.out.println("expression ::= expression SUB term"); :};
+expression ::= term {: System.out.println("expression ::= term "); :};
+term ::= term MULT factor {: System.out.println("term ::= term MULT factor "); :};
+term ::= term DIV factor {: System.out.println("term ::= term DIV factor"); :};
+term ::= factor {: System.out.println("term ::= factor"); :};
+factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" + id); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
+factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("factor ::= SUB INTEGER_CONSTANT:constant ==>" + constant ); :};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
+factor ::= SUB FLOAT_CONSTANT:constant {: System.out.println("factor ::= SUB FLOAT_CONSTANT:constant ==>" + constant ); :};
+factor ::= OPEN_BRACKET expression:e CLOSE_BRACKET {: System.out.println("factor ::= OPEN_BRACKET expression CLOSE_BRACKET :expression ==> " + e); :};
