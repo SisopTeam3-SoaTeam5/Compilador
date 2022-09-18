@@ -1,39 +1,46 @@
 init {
-    contador: Integer;
-    promedio: Float;
-    actual, suma: Float;
-    nombre: String;
-	errorLongInt: Integer;
-	errorLongFloat: Float;
-	errorLongString: String;
+    contador= Integer;
+    promedio= Float;
+    actual, suma= Float;
+    nombre= String;
+	errorLongInt= Integer;
+	errorLongFloat= Float;
+	errorLongString= String;
 	
-	/*Test error en longitud de nombre de variables: no deben superar los 20 caracteres/*
-	/*errorVariableNameTooLong: Integer/*
+	/* Test error en longitud de nombre de variables: no deben superar los 20 caracteres */
+	/* errorVariableNameTooLong: Integer */
 }
 
-contador: (0+3)*1;
+contador= (0+3)*1;
 write "Hola";
 write a;
 write (a+b)*c;
-contador: 0;
+contador= 0;
 
-a:AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
+a=AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
 if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
-    a: a;
+    a= a;
 }
 
-DO a CASE a==101 a:1; CASE a>202 a:2; DEFAULT a:3; ENDDO
+DO a
+    CASE a==101
+        a=1;
+    CASE a>202
+        a=2;
+    DEFAULT
+        a=3;
+ENDDO
 
-actual: 999;
-suma: 02;
-contador: contador+1;
-nombre: "Charles Leclerc";
+actual= 999;
+suma= 02;
+contador= contador+1;
+nombre= "Charles Leclerc";
 read(base);
 
 while (contador <= 92 && suma < 1) {
-    contador: contador + 1;
-    actual: (contador/0.342) + (contador*contador);
-    suma: suma + actual;
+    contador= contador + 1;
+    actual= (contador/0.342) + (contador*contador);
+    suma= suma + actual;
     }
 
 write "La suma es: ";
@@ -59,7 +66,7 @@ if (actual < 3){
         write "soy true";
     }
 }else{
-    actual:333.3333;
+    actual=333.3333;
 }
 
 
@@ -70,24 +77,23 @@ if (actual < 3){
 /*actual := 999;*/
 
 /*Test errores en longitud: Se prueba la asignacion de valores que superen el largo permitido*/
-/*errorLongInt: 9999999999999999;
-errorLongInt: 99999999.99999999;
-errorLongString: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-*/
+/*errorLongInt= 9999999999999999; */
+/* errorLongInt= 99999999.99999999; */
+/* errorLongString= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" */
 
 /*Test errores en sintaxis de WHILE*/
 /*Bloque sin cerrar*/
 /*while (contador <= 92 && suma < 1) {
-    contador: contador + 1;
-    actual: (contador/0.342) + (contador*contador);
-    suma: suma + actual;*/
+    contador= contador + 1;
+    actual= (contador/0.342) + (contador*contador);
+    suma= suma + actual;*/
 /*Funcion incompleta*/
 /*while (contador)*/
 /*Funcion sin condicion*/
 /*while () {
-    contador: contador + 1;
-    actual: (contador/0.342) + (contador*contador);
-    suma: suma + actual;
+    contador= contador + 1;
+    actual= (contador/0.342) + (contador*contador);
+    suma= suma + actual;
     }*/
 
 /*Test error en sintaxis de DO*/
@@ -109,6 +115,6 @@ errorLongString: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 /*Test error en sintaxis ALLEQUAL*/
 /*Parentesis sin cerrar:*/
-/*a:AllEqual([a+b, c+d], [a+b, c+d];}*/
+/*a=AllEqual([a+b, c+d], [a+b, c+d];}*/
 /*Entradas incompletas:*/
-/*a:AllEqual([a+b], [a+b, c+d])}*/
+/*a=AllEqual([a+b], [a+b, c+d])}*/
