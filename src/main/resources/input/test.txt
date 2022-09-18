@@ -3,7 +3,14 @@ init {
     promedio: Float;
     actual, suma: Float;
     nombre: String;
+	errorLongInt: Integer;
+	errorLongFloat: Float;
+	errorLongString: String;
+	
+	/*Test error en longitud de nombre de variables: no deben superar los 20 caracteres/*
+	/*errorVariableNameTooLong: Integer/*
 }
+
 contador: (0+3)*1;
 write "Hola";
 write a;
@@ -16,7 +23,6 @@ if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
 }
 
 DO a CASE a==101 a:1; CASE a>202 a:2; DEFAULT a:3; ENDDO
-
 
 actual: 999;
 suma: 02;
@@ -55,3 +61,54 @@ if (actual < 3){
 }else{
     actual:333.3333;
 }
+
+
+/*----------------------TESTS----------------------*/
+
+/*Test asignacion de variables utilizando lexemas incorrectos*/
+/*actual == 999;*/
+/*actual := 999;*/
+
+/*Test errores en longitud: Se prueba la asignacion de valores que superen el largo permitido*/
+/*errorLongInt: 9999999999999999;
+errorLongInt: 99999999.99999999;
+errorLongString: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+*/
+
+/*Test errores en sintaxis de WHILE*/
+/*Bloque sin cerrar*/
+/*while (contador <= 92 && suma < 1) {
+    contador: contador + 1;
+    actual: (contador/0.342) + (contador*contador);
+    suma: suma + actual;*/
+/*Funcion incompleta*/
+/*while (contador)*/	
+/*Funcion sin condicion*/
+/*while () {
+    contador: contador + 1;
+    actual: (contador/0.342) + (contador*contador);
+    suma: suma + actual;
+    }*/
+
+/*Test error en sintaxis de DO*/
+/*Bloque sin cerrar:*/
+/*DO a CASE a==101 a:1; CASE a>202 a:2; DEFAULT a:3;*/
+/*Bloque sin accion a realizar:*/
+/*DO a CASE a==101 ENDDO*/
+
+/*Test errores en sintaxis de IF*/
+/*Bloque sin cerrar:/*
+/*if (! actual > 2){
+    write "prueba";*/
+/*Funcion sin condicion:*/
+/*if {
+    write "prueba";
+}*/	
+/*Funcion sin accion a realizar en caso de true:/*
+/*if (! actual > 2){}*/
+
+/*Test error en sintaxis ALLEQUAL*/
+/*Parentesis sin cerrar:*/
+/*a:AllEqual([a+b, c+d], [a+b, c+d];}*/
+/*Entradas incompletas:*/
+/*a:AllEqual([a+b], [a+b, c+d])}*/
