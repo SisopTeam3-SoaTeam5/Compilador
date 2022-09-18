@@ -16,8 +16,8 @@ public class SymbolTableGenerator implements FileGenerator{
             SymbolInfo s=SymbolTable.symbolMap.get(symbol);
             String name = String.format("%-30s",symbol);
             String type = String.format("%-20s",s.getDataType());
-            String value = String.format("%-20s",s.getValue()!=null?s.getValue():"xxValuexx");
-            String size = String.format("%-20s",s.getLength()!=0?s.getLength():"xxSizexx");
+            String value = String.format("%-20s",s.getValue()!=null?s.getValue():"-");
+            String size = String.format("%-20s",s.getLength()!=0?s.getLength():"-");
             fileWriter.write(name+"|| "+type+"|| "+ value+"|| "+size+"\n");
         }
     }
