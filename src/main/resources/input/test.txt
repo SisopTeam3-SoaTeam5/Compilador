@@ -79,22 +79,22 @@ if (actual < 3){
 /*Test errores en longitud: Se prueba la asignacion de valores que superen el largo permitido*/
 /*errorLongInt= 9999999999999999; */
 /* errorLongInt= 99999999.99999999; */
-/* errorLongString= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" */
+/* errorLongString= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; */
 
 /*Test errores en sintaxis de WHILE*/
 /*Bloque sin cerrar*/
-/*while (contador <= 92 && suma < 1) {
-    contador= contador + 1;
-    actual= (contador/0.342) + (contador*contador);
-    suma= suma + actual;*/
+/*while (contador <= 92 && suma < 1) { */
+/*    contador= contador + 1; */
+/*    actual= (contador/0.342) + (contador*contador); */
+/*    suma= suma + actual;*/
 /*Funcion incompleta*/
 /*while (contador)*/
 /*Funcion sin condicion*/
-/*while () {
-    contador= contador + 1;
-    actual= (contador/0.342) + (contador*contador);
-    suma= suma + actual;
-    }*/
+/*while () { */
+/*    contador= contador + 1; */
+/*    actual= (contador/0.342) + (contador*contador); */
+/*    suma= suma + actual; */
+/*    }*/
 
 /*Test error en sintaxis de DO*/
 /*Bloque sin cerrar:*/
@@ -103,14 +103,14 @@ if (actual < 3){
 /*DO a CASE a==101 ENDDO*/
 
 /*Test errores en sintaxis de IF*/
-/*Bloque sin cerrar:/*
-/*if (! actual > 2){
-    write "prueba";*/
+/*Bloque sin cerrar:*/
+/*if (! actual > 2){ */
+/*    write "prueba";*/
 /*Funcion sin condicion:*/
-/*if {
-    write "prueba";
-}*/
-/*Funcion sin accion a realizar en caso de true:/*
+/*if { */
+/*    write "prueba"; */
+/*}*/
+/*Funcion sin accion a realizar en caso de true:*/
 /*if (! actual > 2){}*/
 
 /*Test error en sintaxis ALLEQUAL*/
