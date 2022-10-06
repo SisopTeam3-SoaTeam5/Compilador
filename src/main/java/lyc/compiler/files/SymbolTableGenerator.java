@@ -2,6 +2,7 @@ package lyc.compiler.files;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 
 public class SymbolTableGenerator implements FileGenerator{
@@ -12,11 +13,12 @@ public class SymbolTableGenerator implements FileGenerator{
         fileWriter.write("--------------------------------------------------------------------------------------------------\n");
         fileWriter.write(String.format("%-30s","Name")+"|| "+String.format("%-20s","Type")+"|| "+String.format("%-20s","Value")+"|| "+String.format("%-20s","Size")+"\n");
         fileWriter.write("--------------------------------------------------------------------------------------------------\n");
-        for (String symbol : SymbolTable.symbolMap.keySet()){
-            SymbolInfo s=SymbolTable.symbolMap.get(symbol);
-            String name = String.format("%-30s",symbol);
-            String type = String.format("%-20s",s.getDataType());
-            String value = String.format("%-20s",s.getValue()!=null?s.getValue():"-");
+        HashMap<String, SymbolInfo> symbolMap=SymbolTable.getSymbolable();
+        for (String symbol : symbolMap.keySet()){
+            SymbolInfo s=symbolMap.get(symbol);
+            String name = String.format("%-42s",symbol);
+            String type = String.format("%-20s",s.getDataType()!=null?s.getDataType():"-");
+            String value = String.format("%-42s",s.getValue()!=null?s.getValue():"-");
             String size = String.format("%-20s",s.getLength()!=0?s.getLength():"-");
             fileWriter.write(name+"|| "+type+"|| "+ value+"|| "+size+"\n");
         }

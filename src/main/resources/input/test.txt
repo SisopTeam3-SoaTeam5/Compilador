@@ -15,7 +15,7 @@ contador= (0+3)*1;
 write "Hola";
 write a;
 write (a+b)*c;
-contador= 0;
+contador= 1111+2222-3333;
 
 a=AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
 if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
@@ -31,8 +31,8 @@ DO a
         a=3;
 ENDDO
 
-actual= 999;
-suma= 02;
+actual= -999;
+suma= -02556;
 contador= contador+1;
 nombre= "Charles Leclerc";
 read(base);

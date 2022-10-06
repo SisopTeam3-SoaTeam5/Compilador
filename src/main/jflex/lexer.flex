@@ -2,7 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
-import lyc.compiler.files.SymbolInfo;import lyc.compiler.model.*;
+import lyc.compiler.files.SymbolInfo;import lyc.compiler.files.SymbolTable;import lyc.compiler.model.*;
 import static lyc.compiler.constants.Constants.*;
 
 %%
@@ -96,25 +96,32 @@ Comment = "/*" {Content} "*/"
 
     /* identifiers */
     {Identifier}                             {
-                                                        String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
-                                                        if(s.length()<=20){
-                                                            return symbol(ParserSym.IDENTIFIER, yytext());
-                                                            }
-                                                        else throw  new InvalidLengthException("Identificadores deben tener 20 caracteres o menos"); }
+                                                            String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
+                                                            if(s.length()<=20){
+                                                                SymbolTable.insertId(yytext());
+                                                                return symbol(ParserSym.IDENTIFIER, yytext());
+                                                                }
+                                                            else throw  new InvalidLengthException("Identificadores deben tener 20 caracteres o menos"); }
     /* Constants */
     {IntegerConstant}                        {
                                                 Long i = new Long(yytext());
                                                 System.out.println("numero: " + yytext());
-                                                if(Long.toBinaryString(i).toString().length() <= 16)
+                                                if(Long.toBinaryString(i).toString().length() <= 16){
+                                                    SymbolTable.insertNumber(i.toString());
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
+                                                }
                                                 else throw new InvalidIntegerException("Constantes Integer deben tener 16 bits o menos"); }
     {FloatConstant}                          {  Double f = new Double(yytext());
-                                                if(f < Float.MAX_VALUE) //chequear esto, esta medio fafafa
+                                                if(f < Float.MAX_VALUE){
+                                                    SymbolTable.insertNumber(f.toString());
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
+                                                }
                                                 else throw  new RuntimeException("Constantes Float deben tener 32 bits o menos"); }
     {StringConstant}                         {  String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
-                                                if(s.length()<=42) // 42 para no contar ambas comillas ""
+                                                if(s.length()<=42){ // 42 para no contar ambas comillas ""
+                                                    SymbolTable.insertString(yytext());
                                                     return symbol(ParserSym.STRING_CONSTANT, yytext());
+                                                }
                                                 else throw new InvalidLengthException("Constantes String tienen que tener longitud menor o igual a 40 caracteres");
                                              }
 

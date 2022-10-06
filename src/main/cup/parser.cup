@@ -98,29 +98,13 @@ linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
 linea ::= escritura {: System.out.println("linea ::= escritura"); :};
 linea ::= lectura {: System.out.println("linea ::= lectura"); :};
 declaracion ::= list_identifier ASSIG type SEMICOLON {:System.out.println("declaracion ::= list_identifier ASSIG type SEMICOLON");:};
-list_identifier ::= IDENTIFIER:id{:
-                                     System.out.println("list_identifier ::= IDENTIFIER"+id);
-                                     SymbolTable.symbolStack.push(id.toString());
-                                     :};
-
-list_identifier ::= list_identifier COMMA IDENTIFIER:id {:
-                                    System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier");
-                                    SymbolTable.symbolStack.push(id.toString());:};
-type ::= INTEGER                  {:
-                                    SymbolTable.insert("Integer");
-                                    System.out.println("type ::= INTEGER");
-                                    :};
-type ::= FLOAT                  {:SymbolTable.insert("Float");
-                                     System.out.println("type ::= FLOAT");
-                                     :};
-type ::= STRING                 {:SymbolTable.insert("String");
-                                     System.out.println("type ::= STRING");
-                                     :};
+list_identifier ::= IDENTIFIER:id {:System.out.println("list_identifier ::= IDENTIFIER"+id); :};
+list_identifier ::= list_identifier COMMA IDENTIFIER:id {: System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier"); :};
+type ::= INTEGER                  {: System.out.println("type ::= INTEGER"); :};
+type ::= FLOAT                  {: System.out.println("type ::= FLOAT"); :};
+type ::= STRING                 {: System.out.println("type ::= STRING"); :};
 asignacion ::= IDENTIFIER ASSIG expression {: System.out.println("asignacion ::= IDENTIFIER ASSIG expression"); :};
-asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
-                                                SymbolTable.insertString(id.toString(),str.toString());
-                                                System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT");
-                                                :};
+asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
