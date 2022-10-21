@@ -75,12 +75,15 @@ Comment = "/*" {Content} "*/"
     /*Keywords*/
     "init"                                  {return symbol(ParserSym.INIT);}
     "Integer"                               {
+                                                SymbolTable.pilaToTable("Integer");
                                                 return symbol(ParserSym.INTEGER);
                                             }
     "Float"                                 {
+                                                SymbolTable.pilaToTable("Float");
                                                 return symbol(ParserSym.FLOAT);
                                             }
     "String"                                {
+                                                SymbolTable.pilaToTable("String");
                                                 return symbol(ParserSym.STRING);
                                             }
     "if"                                    {return symbol(ParserSym.IF);}
@@ -98,7 +101,7 @@ Comment = "/*" {Content} "*/"
     {Identifier}                             {
                                                             String s = new String(yytext()); //no me dejaba hacer yytext().lenght de una
                                                             if(s.length()<=20){
-                                                                SymbolTable.insertId(yytext());
+                                                                SymbolTable.insertPila(yytext());
                                                                 return symbol(ParserSym.IDENTIFIER, yytext());
                                                                 }
                                                             else throw  new InvalidLengthException("Identificadores deben tener 20 caracteres o menos"); }
@@ -107,13 +110,13 @@ Comment = "/*" {Content} "*/"
                                                 Long i = new Long(yytext());
                                                 System.out.println("numero: " + yytext());
                                                 if(Long.toBinaryString(i).toString().length() <= 16){
-                                                    SymbolTable.insertNumber(i.toString());
+                                                    SymbolTable.insertNumber(i.toString(),"Integer");
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
                                                 }
                                                 else throw new InvalidIntegerException("Constantes Integer deben tener 16 bits o menos"); }
     {FloatConstant}                          {  Double f = new Double(yytext());
                                                 if(f < Float.MAX_VALUE){
-                                                    SymbolTable.insertNumber(f.toString());
+                                                    SymbolTable.insertNumber(f.toString(),"Float");
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                                 }
                                                 else throw  new RuntimeException("Constantes Float deben tener 32 bits o menos"); }

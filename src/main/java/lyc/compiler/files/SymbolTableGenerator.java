@@ -11,7 +11,7 @@ public class SymbolTableGenerator implements FileGenerator{
     public void generate(FileWriter fileWriter) throws IOException {
         fileWriter.write("------- Symbol Table -------\n");
         fileWriter.write("--------------------------------------------------------------------------------------------------\n");
-        fileWriter.write(String.format("%-30s","Name")+"|| "+String.format("%-20s","Type")+"|| "+String.format("%-20s","Value")+"|| "+String.format("%-20s","Size")+"\n");
+        fileWriter.write(String.format("%-42s","Name")+"|| "+String.format("%-20s","Type")+"|| "+String.format("%-42s","Value")+"|| "+String.format("%-20s","Size")+"\n");
         fileWriter.write("--------------------------------------------------------------------------------------------------\n");
         HashMap<String, SymbolInfo> symbolMap=SymbolTable.getSymbolable();
         for (String symbol : symbolMap.keySet()){
