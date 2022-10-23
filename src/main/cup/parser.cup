@@ -2,6 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.*;
 import lyc.compiler.files.*;
+import lyc.compiler.model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 class Parser;
@@ -135,7 +136,7 @@ expression ::= term {: System.out.println("expression ::= term "); :};
 term ::= term MULT factor {: System.out.println("term ::= term MULT factor "); :};
 term ::= term DIV factor {: System.out.println("term ::= term DIV factor"); :};
 term ::= factor {: System.out.println("term ::= factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("factor ::= IDENTIFIER:id ==>" + id); :};
+factor ::= IDENTIFIER:id  {:  :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("factor ::= INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= SUB INTEGER_CONSTANT:constant {: System.out.println("factor ::= SUB INTEGER_CONSTANT:constant ==>" + constant ); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("factor ::= FLOAT_CONSTANT:constant ==>" + constant ); :};
