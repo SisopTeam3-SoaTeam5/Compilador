@@ -6,12 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GCIFactory {
-    private ArrayList<Terceto> tercetos = new ArrayList<>() ;
-    private HashMap<String, String> GCIVariables = new HashMap<>();
+    private static ArrayList<Terceto> tercetos = new ArrayList<>() ;
+    public static HashMap<String, Integer> GCIVariables = new HashMap<>();
 
-    private void insertarTerceto(Terceto t){
+    public static void insertarTerceto(String varInd, Terceto t){
+        GCIVariables.put(varInd,tercetos.size());
         tercetos.add(t);
     }
 
+    public static void asignarVarind(String var1, String var2){
+       GCIVariables.put(var1, GCIVariables.get(var2));
+    }
 
 }
