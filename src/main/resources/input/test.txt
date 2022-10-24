@@ -1,1 +1,1 @@
-a = a+b+c;
+a = promedio/342+(c*c);
