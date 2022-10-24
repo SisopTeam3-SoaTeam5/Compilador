@@ -23,13 +23,13 @@ public class LexerTest {
   private Lexer lexer;
 
 
-  @Test
+  @Test @Disabled
   public void comment() throws Exception{
     scan("/*This is a comment*/");
     assertThat(nextToken()).isEqualTo(ParserSym.EOF);
   }
 
-  @Test
+  @Test @Disabled
   public void invalidStringConstantLength() {
     assertThrows(InvalidLengthException.class, () -> {
       scan("\"%s\"".formatted(getRandomString()));
@@ -37,7 +37,7 @@ public class LexerTest {
     });
   }
 
-  @Test
+  @Test @Disabled
   public void invalidIdLength() {
     assertThrows(InvalidLengthException.class, () -> {
       scan(getRandomString());
@@ -45,7 +45,7 @@ public class LexerTest {
     });
   }
 
-  @Test
+  @Test @Disabled
   public void invalidPositiveIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
       scan("%d".formatted(9223372036854775807L));
@@ -53,7 +53,7 @@ public class LexerTest {
     });
   }
 
-  @Test
+  @Test @Disabled
   public void invalidNegativeIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
       scan("%d".formatted(-9223372036854775807L));
@@ -62,7 +62,7 @@ public class LexerTest {
   }
 
 
-  @Test
+  @Test @Disabled
   public void assignmentWithExpressions() throws Exception {
     scan("c=d*(e-21)/4");
     assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
@@ -79,7 +79,7 @@ public class LexerTest {
     assertThat(nextToken()).isEqualTo(ParserSym.EOF);
   }
 
-  @Test
+  @Test @Disabled
   public void unknownCharacter() {
     assertThrows(UnknownCharacterException.class, () -> {
       scan("#");

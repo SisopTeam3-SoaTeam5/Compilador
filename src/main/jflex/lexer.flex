@@ -59,8 +59,6 @@ Not = "!"
 AND = "&&"
 OR = "||"
 
-Operator = {GreaterThan} | {LessThan} | {GreaterOrEqual} | {LessOrEqual} | {NotEqual} | {Equal} | {Plus} | {Mult} | {Sub} | {Div} | {Assig} | {Not}
-
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+

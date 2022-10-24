@@ -11,9 +11,16 @@ public class GCIFactory {
     public static HashMap<String, String> GCIVariables = new HashMap<>();
     public  static Stack<String> tStack = new Stack<>();
     public  static Stack<String> eStack = new Stack<>();
+    public static Stack<Integer> cellStack=new Stack<>();
+
+    private static String comparator;
 
     public static void insertarTerceto(String varInd, Terceto t){
         GCIVariables.put(varInd,"[" + tercetos.size() + "]");
+        tercetos.add(t);
+    }
+
+    public static void insertarTerceto(Terceto t){
         tercetos.add(t);
     }
 
@@ -30,6 +37,22 @@ public class GCIFactory {
             Terceto t=tercetos.get(i);
             System.out.println("["+i+"]: "+ "("+t.getCelda1()+","+t.getCelda2()+","+t.getCelda3()+")");
         }
+    }
+
+    public static String getVariable(String var){
+        return GCIVariables.get(var);
+    }
+
+    public static void setComparator(String comp){
+        comparator=comp;
+    }
+
+    public static String getComparator(){
+        return comparator;
+    }
+
+    public static void pushCell(){
+        cellStack.push(tercetos.size());
     }
 
     public static String writeTercetos(){
