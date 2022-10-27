@@ -50,11 +50,25 @@ public class GCIFactory {
             return;
         }
         for (int i = 0; i < allEqListA.size(); i++) {
-                tercetos.add(new Terceto("CMP",allEqListA.get(i)+"",allEqListB.get(i)+""));
+                tercetos.add(new Terceto("CMP","["+allEqListA.get(i)+"]","["+allEqListB.get(i)+"]"));
                 tercetos.add(new Terceto("BNE"));
-                allEqStack.push(tercetos.size());
+                allEqStack.push(tercetos.size() - 1);
         }
         allEqListB.clear();
+    }
+
+    public void resolverAllEq(){
+        tercetos.add(new Terceto("=","1","@allEq"));
+        tercetos.add(new Terceto("=","0","@allEq"));
+        Integer tercetoFalse = tercetos.size()-1;
+
+       while(!allEqStack.empty()){
+            System.out.println("stack"+allEqStack.peek());
+            tercetos.get(allEqStack.pop()).setCelda2("["+tercetoFalse+"]");
+        }
+        allEqListA.clear();
+        allEqListB.clear();
+        listAFull = false;
     }
 
     public void asignarVarind(String var1, String var2) {

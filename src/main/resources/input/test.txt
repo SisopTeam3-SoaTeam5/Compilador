@@ -1,8 +1,1 @@
-if(a>b && c==d){
- a=3;
- if(x==y){
-    v=m;
-    }
-    xd=dx;
- }
-b=a;
+a=AllEqual([a+b, c+d], [a+b, c+d], [a+b, c+d]);

@@ -131,8 +131,8 @@ switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO {: System.out.print
 switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
 lista_casos ::= lista_casos CASE comparacion bloquecod {: System.out.println("lista_casos ::= lista_casos CASE comparacion bloquecod"); :};
 lista_casos ::= CASE comparacion bloquecod {: System.out.println("lista_casos ::= CASE comparacion bloquecod"); :};
-all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
-all_equal_params ::= all_equal_params COMMA array_expresiones {: System.out.println("all_equal_params ::= all_equal_params COMMA array_expresiones"); :};
+all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params {: gci.resolverAllEq(); :} CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
+all_equal_params ::= all_equal_params COMMA array_expresiones {: gci.compararListasExp(); :};
 all_equal_params ::= array_expresiones COMMA array_expresiones {: gci.compararListasExp(); :};
 array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones {: gci.setListAFull(true);  :} SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
 lista_expresiones ::= lista_expresiones COMMA expression {: gci.addToList(gci.tercetos.size()-1); :};
