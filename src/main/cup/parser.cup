@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 class Parser;
 
+action code {:
+    GCIFactory gci=new GCIFactory();
+:}
+
 // Terminals
 terminal INIT;
 terminal INTEGER;
@@ -59,6 +63,7 @@ non terminal declaraciones;
 non terminal sentencia;
 non terminal linea;
 non terminal pregunta;
+non terminal preguntaelse;
 non terminal loop;
 non terminal declaracion;
 non terminal list_identifier;
@@ -83,7 +88,9 @@ non terminal lista_expresiones;
 // Start Symbol Definition
 start with sta;
 
-sta ::= programa {: GCIFactory.printTercetos(); :};
+
+
+sta ::= programa {: /*gci.printTercetos();*/ :};
 programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
 programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
 programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
@@ -105,14 +112,17 @@ list_identifier ::= list_identifier COMMA IDENTIFIER:id {: System.out.println("l
 type ::= INTEGER                {: System.out.println("type ::= INTEGER"); :};
 type ::= FLOAT                  {: System.out.println("type ::= FLOAT"); :};
 type ::= STRING                 {: System.out.println("type ::= STRING"); :};
-asignacion ::= IDENTIFIER:id ASSIG expression {: GCIFactory.insertarTerceto("Asigind",new Terceto("=",id.toString(), GCIFactory.GCIVariables.get("Eind"))); :};
+asignacion ::= IDENTIFIER:id ASSIG expression {: gci.insertarTerceto("Asigind",new Terceto("=",id.toString(), gci.GCIVariables.get("Eind"))); :};
 asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
-pregunta ::= IF OPEN_BRACKET  condicion  CLOSE_BRACKET  OPEN_BLOCK bloquecod CLOSE_BLOCK ;
-pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+
+pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK {: gci.endIf(); :};
+preguntaelse ::= pregunta ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+
+
 loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK {: System.out.println("loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
 switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO"); :};
 switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
@@ -124,23 +134,23 @@ all_equal_params ::= array_expresiones COMMA array_expresiones {: System.out.pri
 array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
 lista_expresiones ::= lista_expresiones COMMA expression {: System.out.println("lista_expresiones ::= lista_expresiones COMMA expression "); :};
 lista_expresiones ::= expression {: System.out.println("lista_expresiones ::= lista_expresiones"); :};
-condicion ::= comparacion;
-condicion ::= comparacion logical comparacion ;
-condicion ::= NOT comparacion ;
-logical ::= AND | OR {: System.out.println("logical ::= AND | OR"); :};
-comparacion ::= expression {:GCIFactory.eStack.push(GCIFactory.GCIVariables.get("Eind"));:}comparador expression {: GCIFactory.insertarTerceto("Cind",new Terceto("CMP",GCIFactory.eStack.pop(),GCIFactory.getVariable("Eind")));:};
+condicion ::= comparacion {: gci.pushCell(); gci.insertBranch(); gci.pushLogical(null);:};
+condicion ::= comparacion logical {:gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
+comparacion ::= NOT comparacion {: gci.revertComparator(); gci.pushLogical(null); :} ;       //cambio-> para que se puedan negar las comparaciones individuales
+logical ::= AND {:gci.pushLogical("and");:}  | OR{:gci.pushLogical("or");:}  ;
+comparacion ::= expression {:gci.eStack.push(gci.GCIVariables.get("Eind"));:}comparador expression {: gci.insertarTerceto("Cind",new Terceto("CMP",gci.eStack.pop(),gci.getVariable("Eind")));:};
 comparacion ::= all_equal {: System.out.println("comparacion ::= expression comparador expression"); :};
-comparador ::= GREATER_THAN{:GCIFactory.setComparator("BLE");:} | LESS_THAN{:GCIFactory.setComparator("BGE");:} | GREATER_OR_EQUAL{:GCIFactory.setComparator("BLT");:} | LESS_OR_EQUAL {:GCIFactory.setComparator("BGT");:}| NOT_EQUAL {:GCIFactory.setComparator("BEQ");:}| EQUAL {:GCIFactory.setComparator("BNE");:};
-expression ::= expression PLUS term {: GCIFactory.insertarTerceto("Eind",new Terceto("+", GCIFactory.GCIVariables.get("Eind").toString(), GCIFactory.GCIVariables.get("Tind").toString())); :};
-expression ::= expression SUB term {: GCIFactory.insertarTerceto("Eind",new Terceto("-", GCIFactory.GCIVariables.get("Eind").toString(), GCIFactory.GCIVariables.get("Tind").toString()));  :};
-expression ::= term {: GCIFactory.asignarVarind("Eind","Tind"); System.out.println("BBB");:};
-term ::= term MULT factor {: GCIFactory.insertarTerceto("Tind",new Terceto("*", GCIFactory.getVariable("Tind").toString(), GCIFactory.getVariable("Find").toString()));  :};
-term ::= term DIV factor {: GCIFactory.insertarTerceto("Tind",new Terceto("/", GCIFactory.getVariable("Tind").toString(), GCIFactory.getVariable("Find").toString())); :};
-term ::= factor {:GCIFactory.asignarVarind("Tind","Find");:};
-factor ::= IDENTIFIER:id  {: GCIFactory.insertarTerceto("Find",new Terceto(id.toString())); :};
-factor ::= INTEGER_CONSTANT:constant {: GCIFactory.insertarTerceto("Find",new Terceto(constant.toString())); :};
-factor ::= SUB INTEGER_CONSTANT:constant {: GCIFactory.insertarTerceto("Find",new Terceto( "-" + constant.toString())); :};
-factor ::= FLOAT_CONSTANT:constant {: GCIFactory.insertarTerceto("Find",new Terceto(constant.toString())); :};
-factor ::= SUB FLOAT_CONSTANT:constant {: GCIFactory.insertarTerceto("Find",new Terceto( "-" + constant.toString())); :};
-factor ::= OPEN_BRACKET {: GCIFactory.eStack.push(GCIFactory.GCIVariables.get("Eind"));
-                           GCIFactory.tStack.push(GCIFactory.GCIVariables.get("Tind"));:} expression:e CLOSE_BRACKET {: GCIFactory.asignarVarind("Find","Eind"); GCIFactory.asignarVarind("Eind", GCIFactory.eStack); GCIFactory.asignarVarind("Tind", GCIFactory.tStack); :};
+comparador ::= GREATER_THAN{:gci.setComparator("BLE"); System.out.println("setcmp");:} | LESS_THAN{:gci.setComparator("BGE");:} | GREATER_OR_EQUAL{:gci.setComparator("BLT");:} | LESS_OR_EQUAL {:gci.setComparator("BGT");:}| NOT_EQUAL {:gci.setComparator("BEQ");:}| EQUAL {:gci.setComparator("BNE");:};
+expression ::= expression PLUS term {: gci.insertarTerceto("Eind",new Terceto("+", gci.GCIVariables.get("Eind").toString(), gci.GCIVariables.get("Tind").toString())); :};
+expression ::= expression SUB term {: gci.insertarTerceto("Eind",new Terceto("-", gci.GCIVariables.get("Eind").toString(), gci.GCIVariables.get("Tind").toString()));  :};
+expression ::= term {: gci.asignarVarind("Eind","Tind");:};
+term ::= term MULT factor {: gci.insertarTerceto("Tind",new Terceto("*", gci.getVariable("Tind").toString(), gci.getVariable("Find").toString()));  :};
+term ::= term DIV factor {: gci.insertarTerceto("Tind",new Terceto("/", gci.getVariable("Tind").toString(), gci.getVariable("Find").toString())); :};
+term ::= factor {:gci.asignarVarind("Tind","Find");:};
+factor ::= IDENTIFIER:id  {: gci.insertarTerceto("Find",new Terceto(id.toString())); :};
+factor ::= INTEGER_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto(constant.toString())); :};
+factor ::= SUB INTEGER_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto( "-" + constant.toString())); :};
+factor ::= FLOAT_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto(constant.toString())); :};
+factor ::= SUB FLOAT_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto( "-" + constant.toString())); :};
+factor ::= OPEN_BRACKET {: gci.eStack.push(gci.GCIVariables.get("Eind"));
+                           gci.tStack.push(gci.GCIVariables.get("Tind"));:} expression:e CLOSE_BRACKET {: gci.asignarVarind("Find","Eind"); gci.asignarVarind("Eind", gci.eStack); gci.asignarVarind("Tind", gci.tStack); :};

@@ -1,5 +1,9 @@
 a = promedio/342+(c*c);
-if(a>b){
+if(a>b && c==d){
  a=3;
-}
-b=a<2;
+ if(x==y){
+    v=m;
+    }
+    xd=dx;
+ }
+b=a;
