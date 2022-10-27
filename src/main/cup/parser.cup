@@ -90,7 +90,10 @@ start with sta;
 
 
 
-sta ::= programa {: /*gci.printTercetos();*/ :};
+sta ::= programa {: /*gci.printTercetos();*/
+System.out.println(gci.allEqListA);
+System.out.println(gci.allEqListB);
+:};
 programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
 programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
 programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
@@ -119,7 +122,7 @@ escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE 
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
 
-pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK {: gci.endIf(); :};
+pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET {: gci.setComparator(null); :} OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK {: gci.endIf(); :};
 preguntaelse ::= pregunta ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
 
 
@@ -130,10 +133,10 @@ lista_casos ::= lista_casos CASE comparacion bloquecod {: System.out.println("li
 lista_casos ::= CASE comparacion bloquecod {: System.out.println("lista_casos ::= CASE comparacion bloquecod"); :};
 all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
 all_equal_params ::= all_equal_params COMMA array_expresiones {: System.out.println("all_equal_params ::= all_equal_params COMMA array_expresiones"); :};
-all_equal_params ::= array_expresiones COMMA array_expresiones {: System.out.println("all_equal_params ::= array_expresiones"); :};
-array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
-lista_expresiones ::= lista_expresiones COMMA expression {: System.out.println("lista_expresiones ::= lista_expresiones COMMA expression "); :};
-lista_expresiones ::= expression {: System.out.println("lista_expresiones ::= lista_expresiones"); :};
+all_equal_params ::= array_expresiones COMMA array_expresiones {: gci.compararListasExp(); :};
+array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones {: gci.setListAFull(true);  :} SQUARE_CLOSE_BRACKET {: System.out.println("array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones SQUARE_CLOSE_BRACKET "); :};
+lista_expresiones ::= lista_expresiones COMMA expression {: gci.addToList(gci.tercetos.size()-1); :};
+lista_expresiones ::= expression {: gci.addToList(gci.tercetos.size()-1); :};
 condicion ::= comparacion {: gci.pushCell(); gci.insertBranch(); gci.pushLogical(null);:};
 condicion ::= comparacion logical {:gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
 comparacion ::= NOT comparacion {: gci.revertComparator(); gci.pushLogical(null); :} ;       //cambio-> para que se puedan negar las comparaciones individuales

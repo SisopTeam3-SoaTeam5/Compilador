@@ -7,15 +7,24 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class GCIFactory {
-    private static ArrayList<Terceto> tercetos = new ArrayList<>();
+    public static ArrayList<Terceto> tercetos = new ArrayList<>();
     public HashMap<String, String> GCIVariables = new HashMap<>();
     public Stack<String> tStack = new Stack<>();
     public Stack<String> eStack = new Stack<>();
     public Stack<Integer> cellStack = new Stack<>();
+    public Stack<Integer> allEqStack = new Stack<>();
+
+    public ArrayList<Integer> allEqListA = new ArrayList<>();
+    public ArrayList<Integer> allEqListB = new ArrayList<>();
 
     private String comparator;
     private Stack<String> logical = new Stack<>();
     private HashMap<String, String> reverseComparator = new HashMap<>();
+    public boolean listAFull = false;
+
+    public void setListAFull(boolean listAFull) {
+        this.listAFull = listAFull;
+    }
 
     public GCIFactory() {
         reverseComparator.put("BNE", "BEQ");
@@ -35,6 +44,19 @@ public class GCIFactory {
         tercetos.add(t);
     }
 
+    public void compararListasExp(){
+        if(allEqListA.size() != allEqListB.size()){
+            System.out.println("Error, no seas nabo usa listas con la misma cant de elementos");
+            return;
+        }
+        for (int i = 0; i < allEqListA.size(); i++) {
+                tercetos.add(new Terceto("CMP",allEqListA.get(i)+"",allEqListB.get(i)+""));
+                tercetos.add(new Terceto("BNE"));
+                allEqStack.push(tercetos.size());
+        }
+        allEqListB.clear();
+    }
+
     public void asignarVarind(String var1, String var2) {
         GCIVariables.put(var1, GCIVariables.get(var2));
     }
@@ -50,6 +72,14 @@ public class GCIFactory {
         }
     }
 
+    public void addToList(Integer i){
+        if(!listAFull){
+            allEqListA.add(i);
+        }else{
+            allEqListB.add(i);
+        }
+    }
+
     public String getVariable(String var) {
         return GCIVariables.get(var);
     }
@@ -59,7 +89,6 @@ public class GCIFactory {
     }
 
     public void revertComparator() {
-        System.out.println("revertt");
         comparator = reverseComparator.get(comparator);
     }
 
@@ -72,7 +101,8 @@ public class GCIFactory {
     }
 
     public void insertBranch() {
-        tercetos.add(new Terceto(comparator, null, null));
+        if(comparator!=null)
+         tercetos.add(new Terceto(comparator, null, null));
     }
 
     public void insertBranch(int n) {
