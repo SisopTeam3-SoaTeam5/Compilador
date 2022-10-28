@@ -111,14 +111,14 @@ declaracion ::= list_identifier ASSIG type SEMICOLON {:System.out.println("decla
 list_identifier ::= IDENTIFIER:id {:System.out.println("list_identifier ::= IDENTIFIER"+id); :};
 list_identifier ::= list_identifier COMMA IDENTIFIER:id {: System.out.println("list_identifier ::= IDENTIFIER COMMA list_identifier"); :};
 type ::= INTEGER                {: System.out.println("type ::= INTEGER"); :};
-type ::= FLOAT                  {: System.out.println("type ::= FLOAT"); :};
+type ::= FLOAT                  {: System.out.println("type ::= FLOAT"); :}; // Falta Revisar que los tipos de datos sean correctos
 type ::= STRING                 {: System.out.println("type ::= STRING"); :};
 asignacion ::= IDENTIFIER:id ASSIG expression {: gci.insertarTerceto("Asigind",new Terceto("=",id.toString(), gci.GCIVariables.get("Eind"))); :};
-asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
-asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};
-escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :};
-escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :};
-lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
+asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :}; // Falta
+asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};// Falta
+escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :}; // Falta Preguntas a los profes
+escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :}; //Preguntas a los profes
+lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :}; //Preguntas a los profes
 
 pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET {: gci.setComparator(null); :} OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK {: gci.endIf(); :};
 preguntaelse ::= pregunta ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
