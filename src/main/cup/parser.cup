@@ -78,6 +78,7 @@ non terminal term;
 non terminal factor;
 non terminal logical;
 non terminal condicion;
+non terminal condicionWhile;
 non terminal switch;
 non terminal lista_casos;
 non terminal all_equal;
@@ -90,10 +91,7 @@ start with sta;
 
 
 
-sta ::= programa {: /*gci.printTercetos();*/
-System.out.println(gci.allEqListA);
-System.out.println(gci.allEqListB);
-:};
+sta ::= programa {: /*gci.printTercetos();*/:};
 programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
 programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
 programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
@@ -126,7 +124,7 @@ pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET {: gci.setComparator(null)
 preguntaelse ::= pregunta ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
 
 
-loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK {: System.out.println("loop ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+loop ::= WHILE OPEN_BRACKET {:gci.whileStack.push(gci.tercetos.size());:} condicionWhile  CLOSE_BRACKET OPEN_BLOCK {:gci.startLoop();:} bloquecod CLOSE_BLOCK {: gci.endLoop();:};
 switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO"); :};
 switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
 lista_casos ::= lista_casos CASE comparacion bloquecod {: System.out.println("lista_casos ::= lista_casos CASE comparacion bloquecod"); :};
@@ -138,11 +136,13 @@ array_expresiones ::= SQUARE_OPEN_BRACKET lista_expresiones {: gci.setListAFull(
 lista_expresiones ::= lista_expresiones COMMA expression {: gci.addToList(gci.tercetos.size()-1); :};
 lista_expresiones ::= expression {: gci.addToList(gci.tercetos.size()-1); :};
 condicion ::= comparacion {: gci.pushCell(); gci.insertBranch(); gci.pushLogical(null);:};
-condicion ::= comparacion logical {:gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
+condicionWhile ::=  comparacion {:  gci.pushCell(); gci.insertBranch(); gci.pushLogical(null);:};
+condicion ::= comparacion logical {: gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
+condicionWhile ::=  comparacion logical {: gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
 comparacion ::= NOT comparacion {: gci.revertComparator(); gci.pushLogical(null); :} ;       //cambio-> para que se puedan negar las comparaciones individuales
 logical ::= AND {:gci.pushLogical("and");:}  | OR{:gci.pushLogical("or");:}  ;
-comparacion ::= expression {:gci.eStack.push(gci.GCIVariables.get("Eind"));:}comparador expression {: gci.insertarTerceto("Cind",new Terceto("CMP",gci.eStack.pop(),gci.getVariable("Eind")));:};
-comparacion ::= all_equal {: System.out.println("comparacion ::= expression comparador expression"); :};
+comparacion ::= expression {:gci.eStack.push(gci.GCIVariables.get("Eind"));:}comparador expression {: gci.insertarTerceto("Cind",new Terceto("CMP",gci.eStack.pop(),gci.getVariable("Eind"))); :};
+comparacion ::= all_equal {: gci.setComparator("BNE"); gci.insertarTerceto(new Terceto("CMP","1","@allEq")); :};
 comparador ::= GREATER_THAN{:gci.setComparator("BLE"); System.out.println("setcmp");:} | LESS_THAN{:gci.setComparator("BGE");:} | GREATER_OR_EQUAL{:gci.setComparator("BLT");:} | LESS_OR_EQUAL {:gci.setComparator("BGT");:}| NOT_EQUAL {:gci.setComparator("BEQ");:}| EQUAL {:gci.setComparator("BNE");:};
 expression ::= expression PLUS term {: gci.insertarTerceto("Eind",new Terceto("+", gci.GCIVariables.get("Eind").toString(), gci.GCIVariables.get("Tind").toString())); :};
 expression ::= expression SUB term {: gci.insertarTerceto("Eind",new Terceto("-", gci.GCIVariables.get("Eind").toString(), gci.GCIVariables.get("Tind").toString()));  :};

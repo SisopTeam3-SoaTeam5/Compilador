@@ -13,6 +13,7 @@ public class GCIFactory {
     public Stack<String> eStack = new Stack<>();
     public Stack<Integer> cellStack = new Stack<>();
     public Stack<Integer> allEqStack = new Stack<>();
+    public Stack<Integer> whileStack = new Stack<>();
 
     public ArrayList<Integer> allEqListA = new ArrayList<>();
     public ArrayList<Integer> allEqListB = new ArrayList<>();
@@ -58,12 +59,16 @@ public class GCIFactory {
     }
 
     public void resolverAllEq(){
-        tercetos.add(new Terceto("=","1","@allEq"));
+        tercetos.add(new Terceto("=","1","@allEq")); //Falta algo aca pero nose como hacerlo :(
+        tercetos.add(new Terceto("BI"));
+        Integer i = tercetos.size()-1;
         tercetos.add(new Terceto("=","0","@allEq"));
         Integer tercetoFalse = tercetos.size()-1;
+//        tercetos.add(new Terceto());
+        Integer skip = tercetos.size();
+        tercetos.get(i).setCelda2("["+skip+"]");
 
        while(!allEqStack.empty()){
-            System.out.println("stack"+allEqStack.peek());
             tercetos.get(allEqStack.pop()).setCelda2("["+tercetoFalse+"]");
         }
         allEqListA.clear();
@@ -148,6 +153,29 @@ public class GCIFactory {
         }
     }
 
+    public void startLoop(){
+        if (logical.peek() == "or")     // si fue or guardo posicion de inicio del if
+            cellStack.push(tercetos.size());
+    }
+
+    public void endLoop(){
+        String log = logical.pop(); //el conector del if que esta cerrando
+        if (log == null)
+            tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size()+1) + "]");
+        else if (log == "or") {
+            int startLoop = cellStack.pop();
+            int cond2 = cellStack.pop();
+            int cond1 = cellStack.pop();
+            tercetos.get(cond1).setCelda2("[" + startLoop + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+1) + "]");
+        } else {
+            int cond2 = cellStack.pop();
+            int cond1 = cellStack.pop();
+            tercetos.get(cond1).setCelda2("[" + (tercetos.size()+1) + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+1) + "]");
+        }
+        tercetos.add(new Terceto("BI","["+ whileStack.pop() + "]"));
+    }
 
 
     public static String writeTercetos() {

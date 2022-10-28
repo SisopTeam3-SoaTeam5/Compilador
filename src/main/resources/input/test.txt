@@ -1,1 +1,6 @@
-a=AllEqual([a+b, c+d], [a+b, c+d], [a+b, c+d]);
+c=c+1;
+while(a>b || c==0){
+    while(d>e || f==0){
+        x=y;
+    }
+}
