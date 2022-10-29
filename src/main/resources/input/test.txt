@@ -1,6 +1,16 @@
-c=c+1;
-while(a>b || c==0){
-    while(d>e || f==0){
-        x=y;
-    }
+if(a>b && k==l){
+    c=d;
+    while(h==3){
+            x=4;
+        }
 }
+else{
+    if(j!=k || v>3){
+        m=n;
+    }
+    while(h==3){
+        x=4;
+    }
+    e=f;
+}
+z=y;

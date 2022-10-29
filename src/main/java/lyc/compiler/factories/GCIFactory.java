@@ -45,31 +45,31 @@ public class GCIFactory {
         tercetos.add(t);
     }
 
-    public void compararListasExp(){
-        if(allEqListA.size() != allEqListB.size()){
+    public void compararListasExp() {
+        if (allEqListA.size() != allEqListB.size()) {
             System.out.println("Error, no seas nabo usa listas con la misma cant de elementos");
             return;
         }
         for (int i = 0; i < allEqListA.size(); i++) {
-                tercetos.add(new Terceto("CMP","["+allEqListA.get(i)+"]","["+allEqListB.get(i)+"]"));
-                tercetos.add(new Terceto("BNE"));
-                allEqStack.push(tercetos.size() - 1);
+            tercetos.add(new Terceto("CMP", "[" + allEqListA.get(i) + "]", "[" + allEqListB.get(i) + "]"));
+            tercetos.add(new Terceto("BNE"));
+            allEqStack.push(tercetos.size() - 1);
         }
         allEqListB.clear();
     }
 
-    public void resolverAllEq(){
-        tercetos.add(new Terceto("=","1","@allEq")); //Falta algo aca pero nose como hacerlo :(
+    public void resolverAllEq() {
+        tercetos.add(new Terceto("=", "1", "@allEq")); //Falta algo aca pero nose como hacerlo :(
         tercetos.add(new Terceto("BI"));
-        Integer i = tercetos.size()-1;
-        tercetos.add(new Terceto("=","0","@allEq"));
-        Integer tercetoFalse = tercetos.size()-1;
+        Integer i = tercetos.size() - 1;
+        tercetos.add(new Terceto("=", "0", "@allEq"));
+        Integer tercetoFalse = tercetos.size() - 1;
 //        tercetos.add(new Terceto());
         Integer skip = tercetos.size();
-        tercetos.get(i).setCelda2("["+skip+"]");
+        tercetos.get(i).setCelda2("[" + skip + "]");
 
-       while(!allEqStack.empty()){
-            tercetos.get(allEqStack.pop()).setCelda2("["+tercetoFalse+"]");
+        while (!allEqStack.empty()) {
+            tercetos.get(allEqStack.pop()).setCelda2("[" + tercetoFalse + "]");
         }
         allEqListA.clear();
         allEqListB.clear();
@@ -91,10 +91,10 @@ public class GCIFactory {
         }
     }
 
-    public void addToList(Integer i){
-        if(!listAFull){
+    public void addToList(Integer i) {
+        if (!listAFull) {
             allEqListA.add(i);
-        }else{
+        } else {
             allEqListB.add(i);
         }
     }
@@ -120,8 +120,8 @@ public class GCIFactory {
     }
 
     public void insertBranch() {
-        if(comparator!=null)
-         tercetos.add(new Terceto(comparator, null, null));
+        if (comparator != null)
+            tercetos.add(new Terceto(comparator, null, null));
     }
 
     public void insertBranch(int n) {
@@ -135,46 +135,54 @@ public class GCIFactory {
             cellStack.push(tercetos.size());
     }
 
-    public void endIf() {
+    public void startElse(){
+
+    }
+
+    public void endIf(int sum) {
         String log = logical.pop(); //el conector del if que esta cerrando
         if (log == null)
-            tercetos.get(cellStack.pop()).setCelda2("[" + tercetos.size() + "]");
+            tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size()+sum) + "]");
         else if (log == "or") {
             int startIf = cellStack.pop();
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + startIf + "]");
-            tercetos.get(cond2).setCelda2("[" + tercetos.size() + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+sum) + "]");
         } else {
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
-            tercetos.get(cond1).setCelda2("[" + tercetos.size() + "]");
-            tercetos.get(cond2).setCelda2("[" + tercetos.size() + "]");
+            tercetos.get(cond1).setCelda2("[" + (tercetos.size()+sum) + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+sum) + "]");
         }
     }
 
-    public void startLoop(){
+    public void endElse() {
+        tercetos.get(cellStack.pop()).setCelda2("[" + tercetos.size() + "]");
+    }
+
+    public void startLoop() {
         if (logical.peek() == "or")     // si fue or guardo posicion de inicio del if
             cellStack.push(tercetos.size());
     }
 
-    public void endLoop(){
+    public void endLoop() {
         String log = logical.pop(); //el conector del if que esta cerrando
         if (log == null)
-            tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size()+1) + "]");
+            tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size() + 1) + "]");
         else if (log == "or") {
             int startLoop = cellStack.pop();
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + startLoop + "]");
-            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+1) + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size() + 1) + "]");
         } else {
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
-            tercetos.get(cond1).setCelda2("[" + (tercetos.size()+1) + "]");
-            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+1) + "]");
+            tercetos.get(cond1).setCelda2("[" + (tercetos.size() + 1) + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size() + 1) + "]");
         }
-        tercetos.add(new Terceto("BI","["+ whileStack.pop() + "]"));
+        tercetos.add(new Terceto("BI", "[" + whileStack.pop() + "]"));
     }
 
 

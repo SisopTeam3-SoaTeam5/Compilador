@@ -63,7 +63,7 @@ non terminal declaraciones;
 non terminal sentencia;
 non terminal linea;
 non terminal pregunta;
-non terminal preguntaelse;
+non terminal preguntaElse;
 non terminal loop;
 non terminal declaracion;
 non terminal list_identifier;
@@ -101,7 +101,8 @@ declaraciones ::= declaraciones declaracion {: System.out.println("declaraciones
 bloquecod ::= sentencia {: System.out.println("bloquecod ::= sentencia"); :};
 bloquecod ::= bloquecod sentencia {: System.out.println("bloquecod ::= bloquecod sentencia"); :};
 sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOLON"); :};
-sentencia ::= pregunta {: System.out.println("sentencia ::= pregunta"); :};
+sentencia ::= pregunta {: gci.endIf(0); :};
+sentencia ::= preguntaElse;
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
 sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
 linea ::= asignacion {: System.out.println("linea ::= asignacion"); :};
@@ -120,8 +121,8 @@ escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE 
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :}; //Preguntas a los profes
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :}; //Preguntas a los profes
 
-pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET {: gci.setComparator(null); :} OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK {: gci.endIf(); :};
-preguntaelse ::= pregunta ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: System.out.println("pregunta ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_BLOCK bloquecod CLOSE_BLOCK ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK"); :};
+pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET {: gci.setComparator(null); :} OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK;
+preguntaElse ::= pregunta {: gci.endIf(1);gci.pushCell();gci.insertarTerceto(new Terceto("BI"));:} ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: gci.endElse(); :};
 
 
 loop ::= WHILE OPEN_BRACKET {:gci.whileStack.push(gci.tercetos.size());:} condicionWhile  CLOSE_BRACKET OPEN_BLOCK {:gci.startLoop();:} bloquecod CLOSE_BLOCK {: gci.endLoop();:};
