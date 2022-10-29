@@ -135,9 +135,6 @@ public class GCIFactory {
             cellStack.push(tercetos.size());
     }
 
-    public void startElse(){
-
-    }
 
     public void endIf(int sum) {
         String log = logical.pop(); //el conector del if que esta cerrando
@@ -185,6 +182,13 @@ public class GCIFactory {
         tercetos.add(new Terceto("BI", "[" + whileStack.pop() + "]"));
     }
 
+    public void assignCond(String id){
+        startIf();
+        endIf(2);
+        insertarTerceto(new Terceto("=",id,"1"));
+        insertarTerceto(new Terceto("BI","[" + (tercetos.size()+2) + "]"));
+        insertarTerceto(new Terceto("=",id,"0"));
+    }
 
     public static String writeTercetos() {
         String result = "";

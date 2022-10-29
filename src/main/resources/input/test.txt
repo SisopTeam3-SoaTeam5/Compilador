@@ -1,16 +1,9 @@
-if(a>b && k==l){
-    c=d;
-    while(h==3){
-            x=4;
-        }
-}
-else{
-    if(j!=k || v>3){
-        m=n;
+if(a==b){
+    a= AllEqual([a],[b]) || a>b;
+    if(e==f){
+        g=h;
     }
-    while(h==3){
-        x=4;
-    }
-    e=f;
 }
-z=y;
+
+
+

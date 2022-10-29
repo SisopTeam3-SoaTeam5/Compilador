@@ -114,9 +114,9 @@ list_identifier ::= list_identifier COMMA IDENTIFIER:id {: System.out.println("l
 type ::= INTEGER                {: System.out.println("type ::= INTEGER"); :};
 type ::= FLOAT                  {: System.out.println("type ::= FLOAT"); :}; // Falta Revisar que los tipos de datos sean correctos
 type ::= STRING                 {: System.out.println("type ::= STRING"); :};
-asignacion ::= IDENTIFIER:id ASSIG expression {: gci.insertarTerceto("Asigind",new Terceto("=",id.toString(), gci.GCIVariables.get("Eind"))); :};
+asignacion ::= IDENTIFIER:id ASSIG expression {:gci.insertarTerceto("Asigind",new Terceto("=",id.toString(), gci.GCIVariables.get("Eind"))); :};
 asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :}; // Falta
-asignacion ::= IDENTIFIER ASSIG condicion {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :};// Falta
+asignacion ::= IDENTIFIER:id ASSIG condicion {: System.out.println("asignoCond");gci.assignCond(id.toString()); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :}; // Falta Preguntas a los profes
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :}; //Preguntas a los profes
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :}; //Preguntas a los profes
@@ -138,7 +138,7 @@ lista_expresiones ::= lista_expresiones COMMA expression {: gci.addToList(gci.te
 lista_expresiones ::= expression {: gci.addToList(gci.tercetos.size()-1); :};
 condicion ::= comparacion {: gci.pushCell(); gci.insertBranch(); gci.pushLogical(null);:};
 condicionWhile ::=  comparacion {:  gci.pushCell(); gci.insertBranch(); gci.pushLogical(null);:};
-condicion ::= comparacion logical {: gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
+condicion ::= comparacion logical {: gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);System.out.println("logic comp");:};
 condicionWhile ::=  comparacion logical {: gci.pushCell(); gci.insertBranch(1);:} comparacion {: gci.pushCell(); gci.insertBranch(2);:};
 comparacion ::= NOT comparacion {: gci.revertComparator(); gci.pushLogical(null); :} ;       //cambio-> para que se puedan negar las comparaciones individuales
 logical ::= AND {:gci.pushLogical("and");:}  | OR{:gci.pushLogical("or");:}  ;
