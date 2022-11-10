@@ -16,7 +16,8 @@ public class GCIFactory {
     public Stack<Integer> whileStack = new Stack<>();
     public Stack<Integer> switchStack = new Stack<>();
     public Stack<Integer> switchInconditionalStack = new Stack<>();
-
+    private Stack<Integer> casesCount = new Stack<>();
+    private Stack<String> switchIds = new Stack<>();
     public ArrayList<Integer> allEqListA = new ArrayList<>();
     public ArrayList<Integer> allEqListB = new ArrayList<>();
 
@@ -121,6 +122,25 @@ public class GCIFactory {
         cellStack.push(tercetos.size());
     }
 
+    public void pushSwitchId(String id){
+        switchIds.push(id);
+    }
+
+    public void validateSwitchId() throws Exception{
+        String id=tercetos.get(tercetos.size()-3).getCelda1();
+        if(!id.equals(switchIds.peek()))
+            throw new Exception("Las comparaciones de un case deben tener a la variable utilizada en su definición del lado izquierdo\n" +
+                    "Switch declarado para variable "+switchIds.peek() +" compara a la variable "+id);
+    }
+
+    public void newSwitch(){
+        casesCount.push(1);
+    }
+
+    public void incCasesCount(){
+        casesCount.push(casesCount.pop()+1);
+    }
+
     public void setSwitchBranch(){
         tercetos.get(switchStack.pop()).setCelda2(tercetos.size()+"");
     }
@@ -132,7 +152,9 @@ public class GCIFactory {
         switchInconditionalStack.push(tercetos.size());
     }
     public void pushSwitchEndBlockCell(){
-        while(!switchInconditionalStack.empty())
+        switchIds.pop();
+        int casesCant=casesCount.pop();
+        for(int i=0;i<casesCant;i++)
             tercetos.get(switchInconditionalStack.pop()).setCelda2(tercetos.size()+"");
     }
 

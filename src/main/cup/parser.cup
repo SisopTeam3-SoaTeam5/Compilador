@@ -80,6 +80,7 @@ non terminal factor;
 non terminal logical;
 non terminal condicion;
 non terminal condicionWhile;
+non terminal startswitch;
 non terminal switch;
 non terminal lista_casos;
 non terminal all_equal;
@@ -136,10 +137,11 @@ preguntaElse ::= pregunta {: gci.endIf(1);gci.pushCell();gci.insertarTerceto(new
 
 
 loop ::= WHILE OPEN_BRACKET {:gci.whileStack.push(gci.tercetos.size());:} condicionWhile  CLOSE_BRACKET OPEN_BLOCK {:gci.startLoop();:} bloquecod CLOSE_BLOCK {: gci.endLoop();:};
-switch ::= DO IDENTIFIER lista_casos {: gci.setSwitchBranch();:} DEFAULT bloquecod ENDDO {: gci.pushSwitchEndBlockCell(); :};
-switch ::= DO IDENTIFIER lista_casos {: gci.setSwitchBranch();:} ENDDO {: gci.pushSwitchEndBlockCell(); :};
-lista_casos ::= lista_casos CASE {: gci.setSwitchBranch();:} comparacion {: gci.pushSwitchCell(); gci.insertBranch(); :} bloquecod {: gci.pushSwitchInconditionalCell(); gci.insertarTerceto(new Terceto("BI")); :};
-lista_casos ::= CASE comparacion {: gci.pushSwitchCell(); gci.insertBranch(); :} bloquecod {: gci.pushSwitchInconditionalCell(); gci.insertarTerceto(new Terceto("BI")); :};
+startswitch ::= DO IDENTIFIER:id {:gci.pushSwitchId(id.toString());:} lista_casos {: gci.setSwitchBranch();:};
+switch ::=  startswitch DEFAULT bloquecod ENDDO {: gci.pushSwitchEndBlockCell(); :};
+switch ::= startswitch ENDDO {: gci.pushSwitchEndBlockCell(); :};
+lista_casos ::= lista_casos CASE {:gci.incCasesCount(); gci.setSwitchBranch();:} comparacion {: gci.validateSwitchId();gci.pushSwitchCell(); gci.insertBranch(); :} bloquecod {: gci.pushSwitchInconditionalCell(); gci.insertarTerceto(new Terceto("BI")); :};
+lista_casos ::= CASE{:gci.newSwitch();:} comparacion {:gci.validateSwitchId(); gci.pushSwitchCell(); gci.insertBranch(); :} bloquecod {: gci.pushSwitchInconditionalCell(); gci.insertarTerceto(new Terceto("BI")); :};
 all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params {: gci.resolverAllEq(); :} CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
 all_equal_params ::= all_equal_params COMMA array_expresiones {: gci.compararListasExp(); :};
 all_equal_params ::= array_expresiones COMMA array_expresiones {: gci.compararListasExp(); :};

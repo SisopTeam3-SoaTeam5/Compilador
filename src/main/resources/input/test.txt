@@ -15,11 +15,31 @@ init {
 	/*errorVariableNameTooLong: Integer;*/
 }
 
+contador= (0+3)*1;
+write "Hola";
+write a;
+write (a+b)*c;
+contador= 1111+2222-3333;
+
+a=AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
+if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
+    a= a;
+}
+
 DO a
     CASE a==101
         a=1;
     CASE a<202
+        DO b
+            CASE b==100
+                c=3;
+            DEFAULT
+                d=a;
+        ENDDO
         a=2;
+    CASE a>9
+        d=11;
     DEFAULT
         a=3;
 ENDDO
+b=1;
