@@ -34,6 +34,16 @@ public class SymbolTable {
             symbolMap.put(name, new SymbolInfo(name, dataType));
     }
 
+    public static String findVariableType(String variable) throws Exception {
+        System.out.println(variable);
+        SymbolInfo info = symbolMap.get(variable);
+        if(info != null) {
+            return info.getDataType();
+        }else{
+            throw new Exception(variable + " nunca jamas definida");
+        }
+    }
+
     public static HashMap<String, SymbolInfo> getSymbolable() {
         return symbolMap;
     }

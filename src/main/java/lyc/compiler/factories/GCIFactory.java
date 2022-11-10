@@ -14,6 +14,8 @@ public class GCIFactory {
     public Stack<Integer> cellStack = new Stack<>();
     public Stack<Integer> allEqStack = new Stack<>();
     public Stack<Integer> whileStack = new Stack<>();
+    public Stack<Integer> switchStack = new Stack<>();
+    public Stack<Integer> switchInconditionalStack = new Stack<>();
 
     public ArrayList<Integer> allEqListA = new ArrayList<>();
     public ArrayList<Integer> allEqListB = new ArrayList<>();
@@ -59,7 +61,7 @@ public class GCIFactory {
     }
 
     public void resolverAllEq() {
-        tercetos.add(new Terceto("=", "1", "@allEq")); //Falta algo aca pero nose como hacerlo :(
+        tercetos.add(new Terceto("=", "1", "@allEq"));
         tercetos.add(new Terceto("BI"));
         Integer i = tercetos.size() - 1;
         tercetos.add(new Terceto("=", "0", "@allEq"));
@@ -117,6 +119,21 @@ public class GCIFactory {
 
     public void pushCell() {
         cellStack.push(tercetos.size());
+    }
+
+    public void setSwitchBranch(){
+        tercetos.get(switchStack.pop()).setCelda2(tercetos.size()+"");
+    }
+    public void pushSwitchCell() {
+        switchStack.push(tercetos.size());
+    }
+
+    public void pushSwitchInconditionalCell() {
+        switchInconditionalStack.push(tercetos.size());
+    }
+    public void pushSwitchEndBlockCell(){
+        while(!switchInconditionalStack.empty())
+            tercetos.get(switchInconditionalStack.pop()).setCelda2(tercetos.size()+"");
     }
 
     public void insertBranch() {

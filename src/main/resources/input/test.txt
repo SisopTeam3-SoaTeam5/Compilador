@@ -1,9 +1,25 @@
-if(a==b){
-    a= AllEqual([a],[b]) || a>b;
-    if(e==f){
-        g=h;
-    }
+init {
+    contador= Integer;
+    promedio= Float;
+    a = Integer;
+    b = Integer;
+    c = Integer;
+    d = Integer;
+    actual, suma= Float;
+    nombre= String;
+	errorLongInt= Integer;
+	errorLongFloat= Float;
+	errorLongString= String;
+
+	/* Test error en longitud de nombre de variables: no deben superar los 20 caracteres */
+	/*errorVariableNameTooLong: Integer;*/
 }
 
-
-
+DO a
+    CASE a==101
+        a=1;
+    CASE a<202
+        a=2;
+    DEFAULT
+        a=3;
+ENDDO

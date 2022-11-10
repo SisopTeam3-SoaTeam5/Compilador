@@ -10,6 +10,7 @@ class Parser;
 
 action code {:
     GCIFactory gci=new GCIFactory();
+    SymbolTable st = new SymbolTable();
 :}
 
 // Terminals
@@ -114,8 +115,17 @@ list_identifier ::= list_identifier COMMA IDENTIFIER:id {: System.out.println("l
 type ::= INTEGER                {: System.out.println("type ::= INTEGER"); :};
 type ::= FLOAT                  {: System.out.println("type ::= FLOAT"); :}; // Falta Revisar que los tipos de datos sean correctos
 type ::= STRING                 {: System.out.println("type ::= STRING"); :};
-asignacion ::= IDENTIFIER:id ASSIG expression {:gci.insertarTerceto("Asigind",new Terceto("=",id.toString(), gci.GCIVariables.get("Eind"))); :};
-asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {: System.out.println("asignacion ::= IDENTIFIER ASSIG STRING_CONSTANT"); :}; // Falta
+asignacion ::= IDENTIFIER:id ASSIG expression {:
+                                                System.out.println(id+" Es "+ st.findVariableType(id.toString()));
+                                                if(st.findVariableType(id.toString())!="Float" && st.findVariableType(id.toString())!="Integer"){
+                                                    throw new InvalidTypeException(id+" No es compatible con tipos Integer o Float");
+                                                }
+                                                gci.insertarTerceto("Asigind",new Terceto("=",id.toString(), gci.GCIVariables.get("Eind"))); :};
+asignacion ::= IDENTIFIER:id ASSIG STRING_CONSTANT:str {:
+                                                if(st.findVariableType(id.toString())!="String"){
+                                                    throw new InvalidTypeException(id+" No es compatible con tipo String");
+                                                }
+ gci.insertarTerceto(new Terceto("=",id.toString(), str.toString())); :};
 asignacion ::= IDENTIFIER:id ASSIG condicion {: System.out.println("asignoCond");gci.assignCond(id.toString()); :};
 escritura ::= WRITE STRING_CONSTANT  {: System.out.println("escritura ::= WRITE STRING_CONSTANT"); :}; // Falta Preguntas a los profes
 escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expression"); :}; //Preguntas a los profes
@@ -126,10 +136,10 @@ preguntaElse ::= pregunta {: gci.endIf(1);gci.pushCell();gci.insertarTerceto(new
 
 
 loop ::= WHILE OPEN_BRACKET {:gci.whileStack.push(gci.tercetos.size());:} condicionWhile  CLOSE_BRACKET OPEN_BLOCK {:gci.startLoop();:} bloquecod CLOSE_BLOCK {: gci.endLoop();:};
-switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos DEFAULT bloquecod ENDDO"); :};
-switch ::= DO IDENTIFIER lista_casos ENDDO {: System.out.println("switch ::= DO IDENTIFIER lista_casos ENDDO"); :};
-lista_casos ::= lista_casos CASE comparacion bloquecod {: System.out.println("lista_casos ::= lista_casos CASE comparacion bloquecod"); :};
-lista_casos ::= CASE comparacion bloquecod {: System.out.println("lista_casos ::= CASE comparacion bloquecod"); :};
+switch ::= DO IDENTIFIER lista_casos {: gci.setSwitchBranch();:} DEFAULT bloquecod ENDDO {: gci.pushSwitchEndBlockCell(); :};
+switch ::= DO IDENTIFIER lista_casos {: gci.setSwitchBranch();:} ENDDO {: gci.pushSwitchEndBlockCell(); :};
+lista_casos ::= lista_casos CASE {: gci.setSwitchBranch();:} comparacion {: gci.pushSwitchCell(); gci.insertBranch(); :} bloquecod {: gci.pushSwitchInconditionalCell(); gci.insertarTerceto(new Terceto("BI")); :};
+lista_casos ::= CASE comparacion {: gci.pushSwitchCell(); gci.insertBranch(); :} bloquecod {: gci.pushSwitchInconditionalCell(); gci.insertarTerceto(new Terceto("BI")); :};
 all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params {: gci.resolverAllEq(); :} CLOSE_BRACKET {: System.out.println("all_equal ::= ALLEQUAL OPEN_BRACKET all_equal_params CLOSE_BRACKET"); :}; //sobra???
 all_equal_params ::= all_equal_params COMMA array_expresiones {: gci.compararListasExp(); :};
 all_equal_params ::= array_expresiones COMMA array_expresiones {: gci.compararListasExp(); :};
@@ -151,7 +161,10 @@ expression ::= term {: gci.asignarVarind("Eind","Tind");:};
 term ::= term MULT factor {: gci.insertarTerceto("Tind",new Terceto("*", gci.getVariable("Tind").toString(), gci.getVariable("Find").toString()));  :};
 term ::= term DIV factor {: gci.insertarTerceto("Tind",new Terceto("/", gci.getVariable("Tind").toString(), gci.getVariable("Find").toString())); :};
 term ::= factor {:gci.asignarVarind("Tind","Find");:};
-factor ::= IDENTIFIER:id  {: gci.insertarTerceto("Find",new Terceto(id.toString())); :};
+factor ::= IDENTIFIER:id  {: if(st.findVariableType(id.toString())!="Float" && st.findVariableType(id.toString())!="Integer"){
+                                  throw new InvalidTypeException(id+" No es compatible con tipos Integer o Float");
+                                }
+                                gci.insertarTerceto("Find",new Terceto(id.toString())); :};
 factor ::= INTEGER_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto(constant.toString())); :};
 factor ::= SUB INTEGER_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto( "-" + constant.toString())); :};
 factor ::= FLOAT_CONSTANT:constant {: gci.insertarTerceto("Find",new Terceto(constant.toString())); :};
