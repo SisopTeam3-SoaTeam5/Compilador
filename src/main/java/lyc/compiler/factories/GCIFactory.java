@@ -184,7 +184,7 @@ public class GCIFactory {
         }
     }
 
-    public void endIf(int sum) {
+    public void endIf(int sum,boolean insertEtiq) {
         String log = logical.pop(); //el conector del if que esta cerrando
         if (log == null)
             tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size() + sum) + "]");
@@ -194,18 +194,24 @@ public class GCIFactory {
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + startIf + "]");
             tercetos.get(cond2).setCelda2("[" + (tercetos.size() + sum) + "]");
-            insertarTerceto(new Terceto("et_IF_" + ifCount++));
         } else {
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + (tercetos.size() + sum) + "]");
             tercetos.get(cond2).setCelda2("[" + (tercetos.size() + sum) + "]");
-            insertarTerceto(new Terceto("et_IF_" + ifCount++));
         }
+        if(insertEtiq)
+            insertarTerceto(new Terceto("et_IF_" + ifCount++));
+    }
+
+    public void beforeElse() {
+        insertarTerceto(new Terceto("BI"));
+        insertarTerceto(new Terceto("et_IF_" + ifCount++));
     }
 
     public void endElse() {
         tercetos.get(cellStack.pop()).setCelda2("[" + tercetos.size() + "]");
+        insertarTerceto(new Terceto("et_IF_" + ifCount++));
     }
 
     public void startLoop() {
@@ -238,7 +244,7 @@ public class GCIFactory {
         startIf();
         insertarTerceto(new Terceto("=", id, "1"));
         insertarTerceto(new Terceto("BI", "[" + (tercetos.size() + 3) + "]"));
-        endIf(0);
+        endIf(0,true);
         insertarTerceto(new Terceto("=", id, "0"));
         insertarTerceto(new Terceto("et_IF_" + ifCount++));
     }

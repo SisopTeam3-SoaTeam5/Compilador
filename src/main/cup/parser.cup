@@ -103,7 +103,7 @@ declaraciones ::= declaraciones declaracion {: System.out.println("declaraciones
 bloquecod ::= sentencia {: System.out.println("bloquecod ::= sentencia"); :};
 bloquecod ::= bloquecod sentencia {: System.out.println("bloquecod ::= bloquecod sentencia"); :};
 sentencia ::= linea SEMICOLON {: System.out.println("sentencia ::= linea SEMICOLON"); :};
-sentencia ::= pregunta {: gci.endIf(0); :};
+sentencia ::= pregunta {: gci.endIf(0,true); :};
 sentencia ::= preguntaElse;
 sentencia ::= loop {: System.out.println("sentencia ::= loop"); :};
 sentencia ::= switch {: System.out.println("sentencia ::= switch"); :};
@@ -133,7 +133,7 @@ escritura ::= WRITE expression  {: System.out.println("escritura ::= WRITE expre
 lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("lectura ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :}; //Preguntas a los profes
 
 pregunta ::= IF OPEN_BRACKET  condicion CLOSE_BRACKET {: gci.setComparator(null); :} OPEN_BLOCK {:gci.startIf();:} bloquecod CLOSE_BLOCK;
-preguntaElse ::= pregunta {: gci.endIf(1);gci.pushCell();gci.insertarTerceto(new Terceto("BI"));:} ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: gci.endElse(); :};
+preguntaElse ::= pregunta {: gci.endIf(1,false);gci.pushCell();gci.beforeElse();:} ELSE OPEN_BLOCK bloquecod CLOSE_BLOCK  {: gci.endElse(); :};
 
 
 loop ::= WHILE OPEN_BRACKET {:gci.whileStack.push(gci.tercetos.size());:} condicionWhile  CLOSE_BRACKET OPEN_BLOCK {:gci.startLoop();:} bloquecod CLOSE_BLOCK {: gci.endLoop();:};
