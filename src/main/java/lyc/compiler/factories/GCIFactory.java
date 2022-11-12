@@ -27,6 +27,7 @@ public class GCIFactory {
     public boolean listAFull = false;
     private int ifCount = 0;
     private int whileCount = 0;
+    private int switchCount = 0;
 
 
     public void setListAFull(boolean listAFull) {
@@ -146,6 +147,7 @@ public class GCIFactory {
 
     public void setSwitchBranch() {
         tercetos.get(switchStack.pop()).setCelda2(tercetos.size() + "");
+        insertarTerceto(new Terceto("et_SWITCH_" + switchCount++));
     }
 
     public void pushSwitchCell() {
@@ -161,6 +163,7 @@ public class GCIFactory {
         int casesCant = casesCount.pop();
         for (int i = 0; i < casesCant; i++)
             tercetos.get(switchInconditionalStack.pop()).setCelda2(tercetos.size() + "");
+        insertarTerceto(new Terceto("et_SWITCH_"+ switchCount++));
     }
 
     public void insertBranch() {
@@ -191,13 +194,13 @@ public class GCIFactory {
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + startIf + "]");
             tercetos.get(cond2).setCelda2("[" + (tercetos.size() + sum) + "]");
-            insertarTerceto(new Terceto("et_IF_"+ ifCount++));
+            insertarTerceto(new Terceto("et_IF_" + ifCount++));
         } else {
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + (tercetos.size() + sum) + "]");
             tercetos.get(cond2).setCelda2("[" + (tercetos.size() + sum) + "]");
-            insertarTerceto(new Terceto("et_IF_"+ ifCount++));
+            insertarTerceto(new Terceto("et_IF_" + ifCount++));
         }
     }
 
@@ -237,7 +240,7 @@ public class GCIFactory {
         insertarTerceto(new Terceto("BI", "[" + (tercetos.size() + 3) + "]"));
         endIf(0);
         insertarTerceto(new Terceto("=", id, "0"));
-        insertarTerceto(new Terceto("et_IF_"+ ifCount++));
+        insertarTerceto(new Terceto("et_IF_" + ifCount++));
     }
 
     public static String writeTercetos() {
