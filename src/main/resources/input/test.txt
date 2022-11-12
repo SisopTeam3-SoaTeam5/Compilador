@@ -15,6 +15,13 @@ init {
 	/*errorVariableNameTooLong: Integer;*/
 }
 
+if(a>b || 1>2){
+    a=2;
+    a=c;
+}
+if(a>b && 1>2){
+    a=2;
+}
 contador= (0+3)*1;
 write "Hola";
 write a;
@@ -25,6 +32,9 @@ a=AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
 if(AllEqual([a+b, c+d], [a+b, c+d]) && a>3){
     a= a;
 }
+
+
+
 
 DO a
     CASE a==101

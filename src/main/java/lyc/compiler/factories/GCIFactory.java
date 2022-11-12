@@ -25,6 +25,9 @@ public class GCIFactory {
     private Stack<String> logical = new Stack<>();
     private HashMap<String, String> reverseComparator = new HashMap<>();
     public boolean listAFull = false;
+    private int ifCount = 0;
+    private int whileCount = 0;
+
 
     public void setListAFull(boolean listAFull) {
         this.listAFull = listAFull;
@@ -122,28 +125,29 @@ public class GCIFactory {
         cellStack.push(tercetos.size());
     }
 
-    public void pushSwitchId(String id){
+    public void pushSwitchId(String id) {
         switchIds.push(id);
     }
 
-    public void validateSwitchId() throws Exception{
-        String id=tercetos.get(tercetos.size()-3).getCelda1();
-        if(!id.equals(switchIds.peek()))
+    public void validateSwitchId() throws Exception {
+        String id = tercetos.get(tercetos.size() - 3).getCelda1();
+        if (!id.equals(switchIds.peek()))
             throw new Exception("Las comparaciones de un case deben tener a la variable utilizada en su definición del lado izquierdo\n" +
-                    "Switch declarado para variable "+switchIds.peek() +" compara a la variable "+id);
+                    "Switch declarado para variable " + switchIds.peek() + " compara a la variable " + id);
     }
 
-    public void newSwitch(){
+    public void newSwitch() {
         casesCount.push(1);
     }
 
-    public void incCasesCount(){
-        casesCount.push(casesCount.pop()+1);
+    public void incCasesCount() {
+        casesCount.push(casesCount.pop() + 1);
     }
 
-    public void setSwitchBranch(){
-        tercetos.get(switchStack.pop()).setCelda2(tercetos.size()+"");
+    public void setSwitchBranch() {
+        tercetos.get(switchStack.pop()).setCelda2(tercetos.size() + "");
     }
+
     public void pushSwitchCell() {
         switchStack.push(tercetos.size());
     }
@@ -151,11 +155,12 @@ public class GCIFactory {
     public void pushSwitchInconditionalCell() {
         switchInconditionalStack.push(tercetos.size());
     }
-    public void pushSwitchEndBlockCell(){
+
+    public void pushSwitchEndBlockCell() {
         switchIds.pop();
-        int casesCant=casesCount.pop();
-        for(int i=0;i<casesCant;i++)
-            tercetos.get(switchInconditionalStack.pop()).setCelda2(tercetos.size()+"");
+        int casesCant = casesCount.pop();
+        for (int i = 0; i < casesCant; i++)
+            tercetos.get(switchInconditionalStack.pop()).setCelda2(tercetos.size() + "");
     }
 
     public void insertBranch() {
@@ -170,26 +175,29 @@ public class GCIFactory {
     }
 
     public void startIf() {
-        if (logical.peek() == "or")     // si fue or guardo posicion de inicio del if
+        if (logical.peek() == "or") {     // si fue or guardo posicion de inicio del if
             cellStack.push(tercetos.size());
+            insertarTerceto(new Terceto("et_IF_" + ifCount++));
+        }
     }
-
 
     public void endIf(int sum) {
         String log = logical.pop(); //el conector del if que esta cerrando
         if (log == null)
-            tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size()+sum) + "]");
+            tercetos.get(cellStack.pop()).setCelda2("[" + (tercetos.size() + sum) + "]");
         else if (log == "or") {
             int startIf = cellStack.pop();
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
             tercetos.get(cond1).setCelda2("[" + startIf + "]");
-            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+sum) + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size() + sum) + "]");
+            insertarTerceto(new Terceto("et_IF_"+ ifCount++));
         } else {
             int cond2 = cellStack.pop();
             int cond1 = cellStack.pop();
-            tercetos.get(cond1).setCelda2("[" + (tercetos.size()+sum) + "]");
-            tercetos.get(cond2).setCelda2("[" + (tercetos.size()+sum) + "]");
+            tercetos.get(cond1).setCelda2("[" + (tercetos.size() + sum) + "]");
+            tercetos.get(cond2).setCelda2("[" + (tercetos.size() + sum) + "]");
+            insertarTerceto(new Terceto("et_IF_"+ ifCount++));
         }
     }
 
@@ -198,8 +206,10 @@ public class GCIFactory {
     }
 
     public void startLoop() {
-        if (logical.peek() == "or")     // si fue or guardo posicion de inicio del if
+        if (logical.peek() == "or") {  // si fue or guardo posicion de inicio del if
             cellStack.push(tercetos.size());
+            insertarTerceto(new Terceto("et_WHILE_" + whileCount++));
+        }
     }
 
     public void endLoop() {
@@ -221,12 +231,13 @@ public class GCIFactory {
         tercetos.add(new Terceto("BI", "[" + whileStack.pop() + "]"));
     }
 
-    public void assignCond(String id){
+    public void assignCond(String id) {
         startIf();
-        endIf(2);
-        insertarTerceto(new Terceto("=",id,"1"));
-        insertarTerceto(new Terceto("BI","[" + (tercetos.size()+2) + "]"));
-        insertarTerceto(new Terceto("=",id,"0"));
+        insertarTerceto(new Terceto("=", id, "1"));
+        insertarTerceto(new Terceto("BI", "[" + (tercetos.size() + 3) + "]"));
+        endIf(0);
+        insertarTerceto(new Terceto("=", id, "0"));
+        insertarTerceto(new Terceto("et_IF_"+ ifCount++));
     }
 
     public static String writeTercetos() {
