@@ -5,7 +5,7 @@ import java.util.Stack;
 
 public class SymbolTable {
 
-    private static HashMap<String, SymbolInfo> symbolMap = new HashMap<String, SymbolInfo>();
+    public static HashMap<String, SymbolInfo> symbolMap = new HashMap<String, SymbolInfo>();
     private static Stack<String> pila = new Stack<String>();
 
     public static void insertPila(String valor) {
@@ -19,22 +19,19 @@ public class SymbolTable {
         }
     }
 
-    public static void insertId(String name) {
-        if (!symbolMap.containsKey(name))
-            symbolMap.put(name, new SymbolInfo());
-    }
-
     public static void insertString(String name) {
+        String nameNoSpaces=quitSpaces(name);
         if (!symbolMap.containsKey(name))
-            symbolMap.put(name, new SymbolInfo(name.length(), name));
+            symbolMap.put(nameNoSpaces, new SymbolInfo(name.length(), name));
     }
 
     public static void insertNumber(String name, String dataType) {
         if (!symbolMap.containsKey(name))
-            symbolMap.put(name, new SymbolInfo(name, dataType));
+            symbolMap.put("_"+name, new SymbolInfo(name, dataType));
     }
 
     public static String findVariableType(String variable) throws Exception {
+        variable=quitSpaces(variable);
         System.out.println(variable);
         SymbolInfo info = symbolMap.get(variable);
         if(info != null) {
@@ -42,6 +39,12 @@ public class SymbolTable {
         }else{
             throw new Exception(variable + " nunca jamas definida");
         }
+    }
+
+    private static String quitSpaces(String id){
+        String r=id.replace("\"","_").replace(" ","_");
+        System.out.println(r);
+        return r;
     }
 
     public static HashMap<String, SymbolInfo> getSymbolable() {

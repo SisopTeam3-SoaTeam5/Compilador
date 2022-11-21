@@ -93,7 +93,7 @@ start with sta;
 
 
 
-sta ::= programa {: /*gci.printTercetos();*/:};
+sta ::= programa {: FileOutputWriter.writeOutput("final.asm", new AsmCodeGenerator());:};
 programa ::= bloquecod {: System.out.println("programa ::= bloquecod"); :};
 programa ::= bloquedec {: System.out.println("programa ::= bloquedec"); :};
 programa ::= bloquedec bloquecod {: System.out.println("programa ::= bloquedec bloquecod"); :};
