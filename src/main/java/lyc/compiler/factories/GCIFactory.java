@@ -30,7 +30,6 @@ public class GCIFactory {
     public int allEqCount = 0;
     private int switchCount = 0;
 
-
     public void setListAFull(boolean listAFull) {
         this.listAFull = listAFull;
     }

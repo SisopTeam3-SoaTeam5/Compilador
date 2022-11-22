@@ -36,16 +36,16 @@ public class AsmCodeGenerator implements FileGenerator {
 
 
         ArrayList<Terceto> tercetos= GCIFactory.tercetos;
-
+        String tabs = "\t";
         for(Terceto t : tercetos){
             if(t.getCelda2() == null && t.getCelda3() == null && !t.getCelda1().startsWith("et_")){ // Apilar variables y ctes
-                fileWriter.write("fld "+t.getCelda1()+ "\n");
+                fileWriter.write(tabs+"fld "+t.getCelda1()+ "\n");
             }
             else if(t.getCelda1().contains("CMP")){ // Comparar
-                fileWriter.write("fxch\n");
-                fileWriter.write("fcom\n");
-                fileWriter.write("fstsw ax\n");
-                fileWriter.write("sahf\n");
+                fileWriter.write(tabs+"fxch\n");
+                fileWriter.write(tabs+"fcom\n");
+                fileWriter.write(tabs+"fstsw ax\n");
+                fileWriter.write(tabs+"sahf\n");
             }
             else if(GCIFactory.reverseComparator.containsKey(t.getCelda1())){ //Branchs con etiqs
                 fileWriter.write(branchNames.get(t.getCelda1()) + " " + tercetos.get(Integer.parseInt(t.getCelda2().replace("[","").replace("]",""))).getCelda1() + System.lineSeparator());
@@ -54,22 +54,22 @@ public class AsmCodeGenerator implements FileGenerator {
                 fileWriter.write(t.getCelda1()+":\n");
             }
             else if(t.getCelda1().equals("+")){
-                fileWriter.write("fadd\n");
+                fileWriter.write(tabs+"fadd\n");
             }
             else if(t.getCelda1().equals("-")){
-                fileWriter.write("fsub\n");
+                fileWriter.write(tabs+"fsub\n");
             }
             else if(t.getCelda1().equals("/")){
-                fileWriter.write("fdiv\n");
+                fileWriter.write(tabs+"fdiv\n");
             }
             else if(t.getCelda1().equals("*")){
-                fileWriter.write("fmul\n");
+                fileWriter.write(tabs+"fmul\n");
             }
             else if(t.getCelda1().equals("=")){
                 if(t.getCelda2().equals("@allEq")){
-                    fileWriter.write("fld " + t.getCelda3() + "\n");
+                    fileWriter.write(tabs+"fld " + t.getCelda3() + "\n");
                 }
-                fileWriter.write("fstp " + t.getCelda2()+"\n");
+                fileWriter.write(tabs+"fstp " + t.getCelda2()+"\n");
             }
 
         }
