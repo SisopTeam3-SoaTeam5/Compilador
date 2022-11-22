@@ -10,6 +10,16 @@ import java.util.HashMap;
 
 public class AsmCodeGenerator implements FileGenerator {
 
+    public static HashMap<String, String> branchNames = new HashMap<>();
+    public AsmCodeGenerator(){
+        branchNames.put("BNE", "JNE");
+        branchNames.put("BEQ", "JE");
+        branchNames.put("BGT", "JA");
+        branchNames.put("BLT", "JB");
+        branchNames.put("BGE", "JAE");
+        branchNames.put("BLE", "JNA");
+    }
+
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
         HashMap<String, SymbolInfo> symbolMap = SymbolTable.symbolMap;
@@ -22,13 +32,47 @@ public class AsmCodeGenerator implements FileGenerator {
                 fileWriter.write("\t" + id + "\tdd\t?\t" + symbolMap.get(id).getValue() + "\n");
             }
         }
-        fileWriter.write("\n.CODE");
+        fileWriter.write("\n.CODE \n");
 
 
-        // ArrayList<Terceto> tercetos= GCIFactory.tercetos;
+        ArrayList<Terceto> tercetos= GCIFactory.tercetos;
 
+        for(Terceto t : tercetos){
+            if(t.getCelda2() == null && t.getCelda3() == null && !t.getCelda1().startsWith("et_")){ // Apilar variables y ctes
+                fileWriter.write("fld "+t.getCelda1()+ "\n");
+            }
+            else if(t.getCelda1().contains("CMP")){ // Comparar
+                fileWriter.write("fxch\n");
+                fileWriter.write("fcom\n");
+                fileWriter.write("fstsw ax\n");
+                fileWriter.write("sahf\n");
+            }
+            else if(GCIFactory.reverseComparator.containsKey(t.getCelda1())){ //Branchs con etiqs
+                fileWriter.write(branchNames.get(t.getCelda1()) + " " + tercetos.get(Integer.parseInt(t.getCelda2().replace("[","").replace("]",""))).getCelda1() + System.lineSeparator());
+            }
+            else if(t.getCelda1().startsWith("et_")){
+                fileWriter.write(t.getCelda1()+":\n");
+            }
+            else if(t.getCelda1().equals("+")){
+                fileWriter.write("fadd\n");
+            }
+            else if(t.getCelda1().equals("-")){
+                fileWriter.write("fsub\n");
+            }
+            else if(t.getCelda1().equals("/")){
+                fileWriter.write("fdiv\n");
+            }
+            else if(t.getCelda1().equals("*")){
+                fileWriter.write("fmul\n");
+            }
+            else if(t.getCelda1().equals("=")){
+                if(t.getCelda2().equals("@allEq")){
+                    fileWriter.write("fld " + t.getCelda3() + "\n");
+                }
+                fileWriter.write("fstp " + t.getCelda2()+"\n");
+            }
 
-        //  for(Terceto t : tercetos){
+        }
 
         fileWriter.write("\n\nmov ax,4c00h");
         fileWriter.write("\nint\t21h");
@@ -38,5 +82,7 @@ public class AsmCodeGenerator implements FileGenerator {
     private boolean isConstant(String id) {
         return id.startsWith("_") || id.startsWith("\"");
     }
+
+//    private String createBranch()
 
 }

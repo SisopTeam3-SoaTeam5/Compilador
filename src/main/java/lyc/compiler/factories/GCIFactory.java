@@ -23,10 +23,11 @@ public class GCIFactory {
 
     private String comparator;
     private Stack<String> logical = new Stack<>();
-    private HashMap<String, String> reverseComparator = new HashMap<>();
+    public static HashMap<String, String> reverseComparator = new HashMap<>();
     public boolean listAFull = false;
     private int ifCount = 0;
-    private int whileCount = 0;
+    public static int whileCount = 0;
+    public int allEqCount = 0;
     private int switchCount = 0;
 
 
@@ -66,13 +67,15 @@ public class GCIFactory {
     }
 
     public void resolverAllEq() {
-        tercetos.add(new Terceto("=", "1", "@allEq"));
+        tercetos.add(new Terceto("=", "@allEq", "1"));
         tercetos.add(new Terceto("BI"));
         Integer i = tercetos.size() - 1;
-        tercetos.add(new Terceto("=", "0", "@allEq"));
-        Integer tercetoFalse = tercetos.size() - 1;
+        tercetos.add(new Terceto("et_AllEq_"+ allEqCount++));
+        tercetos.add(new Terceto("=","@allEq", "0"));
+        Integer tercetoFalse = tercetos.size() - 2;
 //        tercetos.add(new Terceto());
         Integer skip = tercetos.size();
+        tercetos.add(new Terceto("et_AllEq_"+ allEqCount++));
         tercetos.get(i).setCelda2("[" + skip + "]");
 
         while (!allEqStack.empty()) {
@@ -217,7 +220,6 @@ public class GCIFactory {
     public void startLoop() {
         if (logical.peek() == "or") {  // si fue or guardo posicion de inicio del if
             cellStack.push(tercetos.size());
-            insertarTerceto(new Terceto("et_WHILE_" + whileCount++));
         }
     }
 
@@ -237,7 +239,8 @@ public class GCIFactory {
             tercetos.get(cond1).setCelda2("[" + (tercetos.size() + 1) + "]");
             tercetos.get(cond2).setCelda2("[" + (tercetos.size() + 1) + "]");
         }
-        tercetos.add(new Terceto("BI", "[" + whileStack.pop() + "]"));
+        tercetos.add(new Terceto("BI", "[" + (whileStack.pop() - 1) + "]"));
+        insertarTerceto(new Terceto("et_WHILE_" + whileCount++));
     }
 
     public void assignCond(String id) {

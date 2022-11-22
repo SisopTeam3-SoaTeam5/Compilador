@@ -29,7 +29,7 @@ if(a>b && 1>2){
 contador= (0+3)*1;
 write "Hola";
 write a;
-write (a+b)*c;
+write a+b*c;
 contador= 1111+2222-3333;
 
 a=AllEqual([a+b, c+d], [a+b, c+d]) || a!=b;
